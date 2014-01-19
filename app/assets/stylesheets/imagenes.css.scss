@@ -1,0 +1,20 @@
+// Place all the styles related to the Imagenes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#test{
+	background-image: url('cropped0_0.jpg');
+	width: 200px;
+	height: 200px;
+}
+
+#board{
+	position: fixed;
+	margin: 200px 400px;
+	width: 500px;
+	height: 300px;
+	border: 2px solid #DBDBDB;	
+}
+
+.piece-of-puzzle:hover{
+	cursor: pointer;
+}

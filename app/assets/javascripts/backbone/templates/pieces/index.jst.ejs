@@ -1,0 +1,11 @@
+<% for(var i=0; i<pieces.length; i++) { %>
+	<% if(pieces[i].title ==  null) { %>
+	<div id='board' style= "width:<%=pieces[i].width*size%>;height:<%=pieces[i].height*size%>;"></div>
+	<% } else { %>
+  <img id = "<%= i %>" class='piece-of-puzzle' src="/assets/<%= pieces[i].title %>" height="<%= size %>" width="<%= size %>">
+
+<%} } %>
+<br/>
+
+<!--<canvas id="testCanvas"  width="500" height="500"></canvas>--> 
+<div style="border:1px solid #DBDBDB; width:40px;height:40px;position:absolute;left:10px;top:10px;"></div>
