@@ -8,5 +8,5 @@ class Puzzle.Routers.PiecesRouter extends Backbone.Router
     console.log @pieces.fetch() 
     @div_containers.fetch()
     console.log @div_containers
-    @view = new Puzzle.Views.Pieces.IndexView(pieces: @pieces)
+    @view = new Puzzle.Views.Pieces.IndexView(pieces: @pieces, div_containers: @div_containers)
     $("body").html(@view.render().el)

@@ -35,6 +35,7 @@ end
 
 gem 'couchrest_model'
 gem 'rmagick'
+gem 'underscore-rails'
 	#gem "rails-backbone"
 
 # Use ActiveModel has_secure_password

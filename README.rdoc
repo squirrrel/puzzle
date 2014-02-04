@@ -1,7 +1,7 @@
 == Purpose
-= Primary, puzzle is to be designed in order to learn Backbone.js features and apply them on practice.
+=== Primary, puzzle is to be designed in order to learn Backbone.js features and apply them on practice.
 
-== USER STORIES
+=== USER STORIES
 
 * As a user I am not supposed to be asked to authenticate before playing - anyone can start playing puzzle by requesting the puzzle root url.
 
@@ -34,15 +34,13 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 
 * After the picture is correctly constructed, I should be complimented and the above dropdown should be enabled/shown again so that I can select a category and start new play.
 
-== Technologies to be used:
+=== Technologies to be used:
 * CouchDB
 * Ruby 1.9.3/2.0.0
 * Ruby on Rails 4.0.0
 * RMagick gem
 * Backbone.js 
 
-== Backlog:
+=== Backlog:
  * Move board down, pieces all around
- * Project commit to a new repository
- * When pieces collection fetched at BB.js, randomly rotate them before displaying
- * Frontend: shuffle div models and randomly select the same amount as of pieces 
+ * Frontend: invent a way of maintain the primary layout every time the page is refreshed and a call is sent to back end, store states
