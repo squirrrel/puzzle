@@ -16,11 +16,32 @@ class DivContainer < CouchRest::Model::Base
 				}"
 	end
 
-	def self.get_all
-		divs.rows.map do |row|
-			row.delete_if {|key, value| key == "id" }
+	class << self
+		def get_and_transform_set id
+			pieces = Piece.send :get_all_child_pieces, id
+			get_random_wrappers(pieces, get_all_divs).shuffle!
 		end
-	end	
+
+		private
+
+		def get_all_divs
+			divs.rows.map do |row|
+				row.delete_if {|key, value| key == "id" }
+			end
+		end	
+
+		def get_random_wrappers pieces, divs
+			result_set = []
+
+			pieces.each do
+				random_index = rand(divs.size)
+				result_set << divs[random_index]
+				divs.pop[random_index]
+			end
+
+			result_set
+		end
+	end
 
 	# EXPLAIN: The method creates DivContainer objects  
 	#  with predefined pixels' values for offset_left and offset_top fields

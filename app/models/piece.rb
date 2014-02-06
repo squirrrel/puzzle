@@ -1,8 +1,11 @@
 require 'couchrest_model'
+require 'RMagick'
+include Magick
 
 class Piece < CouchRest::Model::Base
 	property :title,      String
 	property :imagen_id,  String
+  property :deviation,  String
 	property :created_at, String, default: Time.now.strftime('%d-%m-%Y,%l:%M %p')
 
 	design do
@@ -15,13 +18,34 @@ class Piece < CouchRest::Model::Base
 				}"
 	end
 
-	def self.get_child_pieces picture_id
-		pieces.rows.map do |row|
-			piece = {} 
-			piece["title"] = row.key 
-			piece if row.value == picture_id
-		end
-	end
+  class << self
+    def get_and_transform_set id
+      set = get_all_child_pieces(id).compact
+      add_deviation_to set
+      set.shuffle!
+    end
+
+    private
+
+  	def get_all_child_pieces picture_id
+  		pieces.rows.map! do |row|
+  			piece = {} 
+  			piece[:title] = row.key 
+        piece[:id] = row.id
+  			piece.with_indifferent_access if row.value == picture_id
+  		end
+  	end
+
+  	def add_deviation_to set
+      degrees = [-90, 0, 90, 180, 0]
+      set.each do |piece|
+        deviation = piece[:deviation] = degrees[rand(5)] 
+        get(piece[:id]).update_attributes(deviation: deviation)
+      end
+
+      set
+    end
+  end
 
 	# EXPLAIN: The method creates set of piece records based on some predefined parameters
 	# def self.create_pieces

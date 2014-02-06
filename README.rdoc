@@ -42,5 +42,6 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 * Backbone.js 
 
 === Backlog:
- * Move board down, pieces all around
  * Frontend: invent a way of maintain the primary layout every time the page is refreshed and a call is sent to back end, store states
+ * Every object should be loaded simultaneously, not iteratively 
+ * On image select, user will see the board and pieces. On change we send a request to backend, it makes certain state to the pieces of puzzle and divs, stores it as a metadata as a whole new state class, and returns the pieces. On each refresh backbone than requests only states out of pieces and divs.

@@ -20,10 +20,19 @@ class Imagen < CouchRest::Model::Base
 			map:
 				"function(doc) {
 					if(doc['type'] == 'Imagen' && doc.title) {
-						emit(doc.title, null);
+						emit(doc.title, doc._id);
 					}
 				}"		
-	end	
+	end
+
+	def self.get_all
+		imagenes.rows.map! do |row|
+			imagen = {}
+			imagen[:title] = row.key
+			imagen[:id] = row.value
+			imagen
+		end
+	end
 
 	# EXPLAIN: The method iterates through hashes, and based on their key-value pairs,
 	#  creates corresponding Imagen objects in the DB
@@ -34,16 +43,6 @@ class Imagen < CouchRest::Model::Base
 	# 		subcategory: 'Japanese'
 	# 	)
 	# end
-
-	# TODO: Metadata should be available from a particular picture doc/view
-	def self.get_pieces_and_metadata
-		pieces_collection = Piece.get_child_pieces('ba546f2e47d2a915c3ffff08503e5b86').compact
-	 	metadata = {}
-	 	metadata['width'] = 13 #number_of_x_cuts
-		metadata['height'] = 7 #y_step.size
-	 	pieces_collection << metadata
-	 	pieces_collection
-	end	
 
 	private
 	# EXPLAIN: The method will be useful for cutting a picture into pieces which will be then referenced 

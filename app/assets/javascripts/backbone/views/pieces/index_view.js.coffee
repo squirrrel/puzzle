@@ -5,18 +5,19 @@ class Puzzle.Views.Pieces.IndexView extends Backbone.View
 
   events:
     'click .piece-of-puzzle': 'rotatePieceOnClick'
+    'change #imagenes': 'servePuzzle'
 
   initialize: () ->
     @options.pieces.bind('reset', @render)
     @options.div_containers.bind('reset', @render)
+    @options.imagenes.bind('reset', @render)
 
   render: =>
-   pieces = @options.pieces.toJSON()
-   divs = @options.div_containers.toJSON()
    $(@el).html(
     @template(
-     pieces: @shuffleAndRotate(pieces), 
-     divs: @getRandomDivsForPieces(pieces, divs), 
+     pieces: @options.pieces.toJSON(), 
+     divs: @options.div_containers.toJSON(),
+     imagenes: @options.imagenes.toJSON(), 
      size: 40
     )
    )
@@ -31,28 +32,29 @@ class Puzzle.Views.Pieces.IndexView extends Backbone.View
       else if $("##{img_id}").attr('alt') is undefined
         90
       else
-        Number($("##{img_id}").attr('alt')) + 90  
+        Number($("##{img_id}").attr('alt')) + 90
     $("##{img_id}").css('-webkit-transform',"rotate(#{total_}deg)")
      .css('transform',"rotate(#{total_}deg)")
      .css('-moz-transform', "rotate(#{total_}deg)")
     $("##{img_id}").removeAttr('alt')
     $("##{img_id}").attr('alt', total_)
 
-  shuffleAndRotate: (pieces) ->
-   _.each(
-    pieces, (value, key)-> 
-     value.angle = _.sample([-90, 0, 90, 180, 0]) 
-   )
-   _.shuffle(pieces)
+  servePuzzle: (event) ->
+   imagen_id = $('#imagenes').find('option:selected').attr('value')
+   imagen = new Puzzle.Models.Imagen(imagen_id: imagen_id)
+   @options.imagenes.create(imagen, { 
+    silent: true, 
+    wait: true, 
+    success: @display_puzzle, 
+    error: @display_error 
+   })
 
-  getRandomDivsForPieces: (pieces, divs) ->
-   console.log divs
-   result_set = new Array
-   for piece in pieces
-    selected_div = divs[_.random(divs.length)]
-    result_set.push(selected_div)
-    divs.splice(divs.indexOf(selected_div),1)
-   _.shuffle(result_set)
+  display_puzzle: (model, response) =>
+   pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: response.pieces, divs: response.divs)
+   $(@el).append(pieces_view.render().el)
+
+  display_error: (model, response) =>
+   console.log response
 
   drawCanvas: ->
     canvas = document.getElementById('testCanvas')
