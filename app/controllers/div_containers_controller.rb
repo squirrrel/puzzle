@@ -3,6 +3,6 @@ class DivContainersController < ApplicationController
 
   # Rename State to Session?
 	def index
-    respond_with State.get_divs_for(session[:session_id], :value)
+    puts respond_with State.get_divs_for(session[:session_id], :value)
 	end
 end

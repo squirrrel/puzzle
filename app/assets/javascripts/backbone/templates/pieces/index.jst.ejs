@@ -1,11 +1,8 @@
 <% for(var i=0; i<pieces.length; i++) { %>
-	<% if(pieces[i].title ==  null) { %>
-	<div id='board' style= "style="width:<%=pieces[i].width*size%>;height:<%=pieces[i].height*size%>;"></div>
-	<% } else { %>
 	<div style="position:absolute;left:<%=divs[i].key %>px;top:<%= divs[i].value %>px;">
   <img id = "<%= i %>" class='piece-of-puzzle' src="/assets/<%= pieces[i].title %>" height="<%= size %>" width="<%= size%>" style='transform:rotate(<%= pieces[i].deviation %>deg);-webkit-transform:rotate(<%= pieces[i].deviation %>deg);-moz-transform:rotate(<%= pieces[i].angle %>deg);'></div>
 
-<%} } %>
+<%} %>
 <br/>
 <select id = 'imagenes' name = 'imagenes'>
 <option value = "111">--Select image--</>

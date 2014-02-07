@@ -18,12 +18,12 @@ class State < CouchRest::Model::Base
 
   class << self
     def create_record session, pieces, divs
-      create!( id: session, pieces: pieces, divs: divs)
+     p create!( id: session, pieces: pieces, divs: divs)
     end
 
     [:get_divs_for, :get_pieces_for].each do |method|
       define_method method do |session, index|
-        states.rows.map! { |row| row.send index if row.id == session }.compact      
+        states.rows.map! { |row| row.send index if row.id == session }.compact[0]      
       end
     end
   end

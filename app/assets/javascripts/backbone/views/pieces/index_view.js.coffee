@@ -50,8 +50,8 @@ class Puzzle.Views.Pieces.IndexView extends Backbone.View
    })
 
   display_puzzle: (model, response) =>
-   pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: response.pieces, divs: response.divs)
-   $(@el).append(pieces_view.render().el)
+   @options.pieces.fetch()
+   @options.div_containers.fetch()
 
   display_error: (model, response) =>
    console.log response
