@@ -1,8 +1,8 @@
 class DivContainersController < ApplicationController
-		respond_to :json
+  respond_to :json
 
   # Rename State to Session?
-	def index
-    puts respond_with State.get_divs_for(session[:session_id], :value)
-	end
+  def index
+    respond_with State.get_divs_for(session[:session_id], 'divs')
+  end
 end

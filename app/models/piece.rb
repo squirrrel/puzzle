@@ -22,6 +22,7 @@ class Piece < CouchRest::Model::Base
     def get_and_transform_set id
       set = get_all_child_pieces(id).compact
       add_deviation_to set
+			add_offset_to set, id       
       set.shuffle!
     end
 
@@ -35,6 +36,15 @@ class Piece < CouchRest::Model::Base
   			piece.with_indifferent_access if row.value == picture_id
   		end
   	end
+
+    def add_offset_to set, id
+    	divs = (DivContainer.send :get_all_divs).shuffle!
+    	set.each do |piece|
+				random_index = rand(divs.size)    		
+    		piece.merge!(divs[random_index])
+				divs.slice!(random_index)
+    	end
+    end
 
   	def add_deviation_to set
       degrees = [-90, 0, 90, 180, 0]

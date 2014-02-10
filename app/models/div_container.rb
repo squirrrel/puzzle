@@ -17,6 +17,7 @@ class DivContainer < CouchRest::Model::Base
 	end
 
 	class << self
+		# TO BE REMOVED
 		def get_and_transform_set id
 			pieces = Piece.send :get_all_child_pieces, id
 			get_random_wrappers(pieces, get_all_divs).shuffle!
@@ -30,6 +31,7 @@ class DivContainer < CouchRest::Model::Base
 			end
 		end	
 
+		# TO BE REMOVED
 		def get_random_wrappers pieces, divs
 			result_set = []
 
