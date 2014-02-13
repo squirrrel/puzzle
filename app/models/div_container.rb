@@ -17,31 +17,10 @@ class DivContainer < CouchRest::Model::Base
 	end
 
 	class << self
-		# TO BE REMOVED
-		def get_and_transform_set id
-			pieces = Piece.send :get_all_child_pieces, id
-			get_random_wrappers(pieces, get_all_divs).shuffle!
-		end
-
-		private
-
 		def get_all_divs
 			divs.rows.map do |row|
 				row.delete_if {|key, value| key == "id" }
 			end
-		end	
-
-		# TO BE REMOVED
-		def get_random_wrappers pieces, divs
-			result_set = []
-
-			pieces.each do
-				random_index = rand(divs.size)
-				result_set << divs[random_index]
-				divs.pop[random_index]
-			end
-
-			result_set
 		end
 	end
 

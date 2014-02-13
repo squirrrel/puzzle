@@ -1,13 +1,15 @@
 <% for(var i=0; i<pieces.length; i++) { %>
-	<div style="position:absolute;left:<%=divs[i].key %>px;top:<%= divs[i].value %>px;">
-  <img id = "<%= i %>" class='piece-of-puzzle' src="/assets/<%= pieces[i].title %>" height="<%= size %>" width="<%= size%>" style='transform:rotate(<%= pieces[i].deviation %>deg);-webkit-transform:rotate(<%= pieces[i].deviation %>deg);-moz-transform:rotate(<%= pieces[i].angle %>deg);'></div>
+	<div style="position:absolute;left:<%=pieces[i].x %>px;top:<%= pieces[i].y %>px;">
+  <img id = "<%= pieces[i].id %>" class='piece-of-puzzle' src="/assets/<%= pieces[i].title %>" height="<%= size %>" width="<%= size %>" style='transform:rotate(<%= pieces[i].deviation %>deg);-webkit-transform:rotate(<%= pieces[i].deviation %>deg);-moz-transform:rotate(<%= pieces[i].deviation %>deg);'></div>
 
 <%} %>
-<br/>
-<select id = 'imagenes' name = 'imagenes'>
-<option value = "111">--Select image--</>
 <% for(var i=0; i<imagenes.length; i++) { %>
-  <option value="<%= imagenes[i].id %>"><%= imagenes[i].title %></option>
+<img src="/assets/<%= imagenes[i].title %>" height="200" width="400" class='imagenes' id ="<%= imagenes[i].id %>">
 <% } %>
-</select>
+<div id='board' style="position:relative; margin: 200px auto;border-left:none;border-bottom:none;border-top: 1px solid #DBDBDB;border-right: 1px solid #DBDBDB; width:<%= columns*size %>px;height:<%= rows*size %>px;">
+<% for(var i=0; i<columns*rows; i++) { %>
+<div class="cell" style="float:left;border-left: 1px solid #DBDBDB;border-bottom: 1px solid #DBDBDB; width:<%= size-1 %>px;height:<%= size-1 %>px;"></div>
+<% } %>
+</div>
+<div id="test" style="position:absolute;background-color:green;width:20px;height:20px;"></div>
 <!--<canvas id="testCanvas"  width="500" height="500"></canvas>--> 

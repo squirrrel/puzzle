@@ -44,9 +44,40 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 === Backlog:
  * Every object should be loaded simultaneously, not iteratively 
  * On image select, user will see the board and pieces. On change we send a request to backend, it makes certain state to the pieces of puzzle and divs, stores it as a metadata as a whole new state class, and returns the pieces. On each refresh backbone than requests only states out of pieces and divs.
- 1. Fix divs random selector and force it select only unique divs
- 2. Instead of dropdown, user should see a gallery of pictures, on picture click, they disappear and pieces are displayed
  3. Store states in Redis or whatever alive as long as the process is running. NICE
  4. Learn Sublime in depth
  5. Pry
- 6. REMOVE divs model and request to the divs resource, simplify divs backend model, fix coffee to use piece[i].key/value instead
+ 6. Snapping
+ 7. Piece should be draggable only within screen, not outside
+ 8. Apply it within backbone
+ 9. Beautify game
+ 10. Enforce game rules
+
+ MAKE INDIVIDUAL VIEW FOR A PIECE. CALL  @options.pieces.models[0].save
+  @options.imagenes.create(imagen, ON  A MODEL NOT ON COLLECTION
+
+  ROTATION STUFF
+
+
+
+do drag = ->
+  $(document).ready(
+    ()-> $("#test").bind('draginit',(event,dragdrop) ->
+      $(this).css('cursor', 'move')
+    )
+
+    .bind('dragstart',(event,dragdrop) ->
+      false if !$(event.target).is('.handle')
+      $(this).css('cursor', 'move').css('opacity', .5).clone().insertAfter(this)
+    )
+
+    .bind('drag',(event,dragdrop) ->
+      $(dragdrop.proxy).css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
+    )
+
+    .bind('dragend',(event, dragdrop) ->
+      $(dragdrop.proxy).remove()
+      $(this).css('cursor', 'default')
+      $('#test').animate({ top: dragdrop.offsetY, left: dragdrop.offsetX, opacity: 1 })
+    )
+  )

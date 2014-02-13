@@ -2,6 +2,6 @@ Puzzle::Application.routes.draw do
   root to: "main#index"
   
   scope 'api' do
-    resources :imagenes, :div_containers, :pieces, only: [:index, :create]
+    resources :imagenes, :pieces, only: [:index, :create, :update]
   end 
 end

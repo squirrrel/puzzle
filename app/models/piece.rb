@@ -38,7 +38,7 @@ class Piece < CouchRest::Model::Base
   	end
 
     def add_offset_to set, id
-    	divs = (DivContainer.send :get_all_divs).shuffle!
+    	divs = DivContainer.get_all_divs.shuffle!
     	set.each do |piece|
 				random_index = rand(divs.size)    		
     		piece.merge!(divs[random_index])
