@@ -52,11 +52,13 @@ OR: it can only be moved from the free zone onto the board and back to its origi
  8. Apply it within backbone
  9. Beautify game
  10. Enforce game rules
+ 11. Add divs coordinates from below the board.
+
 
  MAKE INDIVIDUAL VIEW FOR A PIECE. CALL  @options.pieces.models[0].save
   @options.imagenes.create(imagen, ON  A MODEL NOT ON COLLECTION
 
-  ROTATION STUFF
+
 
 
 

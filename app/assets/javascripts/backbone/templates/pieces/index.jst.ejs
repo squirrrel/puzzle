@@ -1,8 +1,3 @@
-<% for(var i=0; i<pieces.length; i++) { %>
-	<div style="position:absolute;left:<%=pieces[i].x %>px;top:<%= pieces[i].y %>px;">
-  <img id = "<%= pieces[i].id %>" class='piece-of-puzzle' src="/assets/<%= pieces[i].title %>" height="<%= size %>" width="<%= size %>" style='transform:rotate(<%= pieces[i].deviation %>deg);-webkit-transform:rotate(<%= pieces[i].deviation %>deg);-moz-transform:rotate(<%= pieces[i].deviation %>deg);'></div>
-
-<%} %>
 <% for(var i=0; i<imagenes.length; i++) { %>
 <img src="/assets/<%= imagenes[i].title %>" height="200" width="400" class='imagenes' id ="<%= imagenes[i].id %>">
 <% } %>
