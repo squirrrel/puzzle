@@ -6,8 +6,17 @@ class PiecesController < ApplicationController
   end
 
   def update
-    current_deviation = State.update_record(session[:session_id], params[:piece_id])
-    render json: { current_deviation: current_deviation, 
-                   id: params[:piece_id], location: "piece" }
+    if params[:offset]
+      State.update_offset(session[:session_id], 
+                          params[:piece_id], 
+                          params[:offset])
+      render json: {}
+    else
+      current_deviation = State.update_deviation(session[:session_id], 
+                                                 params[:piece_id])
+
+      render json: { current_deviation: current_deviation, 
+                     id: params[:piece_id], location: "piece" }
+    end
   end
 end

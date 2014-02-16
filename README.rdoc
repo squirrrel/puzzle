@@ -42,44 +42,13 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 * Backbone.js 
 
 === Backlog:
- * Every object should be loaded simultaneously, not iteratively 
  * On image select, user will see the board and pieces. On change we send a request to backend, it makes certain state to the pieces of puzzle and divs, stores it as a metadata as a whole new state class, and returns the pieces. On each refresh backbone than requests only states out of pieces and divs.
  3. Store states in Redis or whatever alive as long as the process is running. NICE
  4. Learn Sublime in depth
  5. Pry
- 6. Snapping
- 7. Piece should be draggable only within screen, not outside
- 8. Apply it within backbone
+ 7. Piece should be draggable only within screen, not outside DONE but scrolls must be removed
  9. Beautify game
  10. Enforce game rules
  11. Add divs coordinates from below the board.
-
-
- MAKE INDIVIDUAL VIEW FOR A PIECE. CALL  @options.pieces.models[0].save
-  @options.imagenes.create(imagen, ON  A MODEL NOT ON COLLECTION
-
-
-
-
-
-do drag = ->
-  $(document).ready(
-    ()-> $("#test").bind('draginit',(event,dragdrop) ->
-      $(this).css('cursor', 'move')
-    )
-
-    .bind('dragstart',(event,dragdrop) ->
-      false if !$(event.target).is('.handle')
-      $(this).css('cursor', 'move').css('opacity', .5).clone().insertAfter(this)
-    )
-
-    .bind('drag',(event,dragdrop) ->
-      $(dragdrop.proxy).css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
-    )
-
-    .bind('dragend',(event, dragdrop) ->
-      $(dragdrop.proxy).remove()
-      $(this).css('cursor', 'default')
-      $('#test').animate({ top: dragdrop.offsetY, left: dragdrop.offsetX, opacity: 1 })
-    )
-  )
+ 13. The dragged piece should be dragged above any other
+ 14. The dragged piece cannot overlap any other after dragend otherwise it is dragged near or back

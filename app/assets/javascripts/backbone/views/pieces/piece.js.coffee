@@ -1,32 +1,32 @@
 Puzzle.Views.Pieces ||= {}
 
 class Puzzle.Views.Pieces.Piece extends Backbone.View
-  
   tagName: "img"
 
   initialize: () ->
    $(@el).bind('click', @rotatePieceOnClick)
-   $(@el).bind('draginit', @dragInit)
-   $(@el).bind('dragend', @dragEnd)
+    .bind('draginit', @dragInit)
+    .bind('dragstart', @dragStart)
+    .bind('drag', @dragPiece)
+    .bind('dragend', @dragEnd)
    @piece = @options.piece.toJSON() 
 
   render: =>
    $(@el).attr('id', @piece.id)
-   $(@el).attr('class', 'piece-of-puzzle')
-   $(@el).attr('src', "/assets/#{@piece.title}")
-   $(@el).attr('height', '40')
-   $(@el).attr('width', '40')
-   $(@el).css('transform', "rotate(#{@piece.deviation}deg)")
-   $(@el).css('-webkit-transform', "rotate(#{@piece.deviation}deg)")
-   $(@el).css('-moz-transform', "rotate(#{@piece.deviation}deg)")
-   $(@el).css('position', "absolute")
-   $(@el).css('left', "#{@piece.x}px")
-   $(@el).css('top', "#{@piece.y}px")
+    .attr('class', 'piece-of-puzzle')
+    .attr('src', "/assets/#{@piece.title}")
+    .attr('height', '40')
+    .attr('width', '40')
+    .css('transform', "rotate(#{@piece.deviation}deg)")
+    .css('-webkit-transform', "rotate(#{@piece.deviation}deg)")
+    .css('-moz-transform', "rotate(#{@piece.deviation}deg)")
+    .css('position', "absolute")
+    .css('left', "#{@piece.x}px")
+    .css('top', "#{@piece.y}px")
    return this
 
   rotatePieceOnClick: (event) =>
-   img_id = event.currentTarget.id
-   piece = new Puzzle.Models.Piece(piece_id: img_id)
+   piece = new Puzzle.Models.Piece(piece_id: $(@el).attr('id'))
 
    @options.piece.save(piece, { 
     silent: true, 
@@ -45,42 +45,47 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    console.log response
 
   dragInit: (event, dragdrop) =>
-   console.log 'init'
-   $(@el).css('cursor', 'move')
-    .bind('drag', @dragPiece)
 
   dragStart: (event, dragdrop) =>
-   console.log 'start'
-   false if !$(event.target).is('.handle')
-   target_id = event.currentTarget.id
-   $("##{target_id}").css('opacity', .5).clone().insertAfter("##{target_id}")
+   $(@el).css('cursor', 'move')
+   false if !$(dragdrop.target).is('.handle')
+   $(@el).css('opacity', .5).clone().insertAfter(@el)
   
   dragPiece: (event, dragdrop) =>
-   console.log 'drag'
-   $(@el).css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
+   $(dragdrop.proxy).css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
   
   dragEnd: (event, dragdrop) =>
-   console.log 'end'
+   console.log $(window).width()
    $(@el).css('cursor', 'default')
-   $(@el).unbind('drag')
-   ### target_id = event.currentTarget.id
    $(dragdrop.proxy).remove()
    container = new Array
 
    $('.cell').each(()->
-   delta_x = dragdrop.offsetX - $("##{target_id}").offset().left
-   delta_y = dragdrop.offsetY - $("##{target_id}").offset().top
-   if delta_x >= -30 && delta_x <= 30 && delta_y >= -30 && delta_y <= 30
-    container.push(left_x: $("##{target_id}").offset().left, top_y: $("##{target_id}").offset().top)
-   else
-    true
-   )
+    delta_x = dragdrop.offsetX - $(@).offset().left
+    delta_y = dragdrop.offsetY - $(@).offset().top
+    if delta_x >= -20 && delta_x <= 20 && delta_y >= -20 && delta_y <= 20
+     container.push(left_x: $(@).offset().left, top_y: $(@).offset().top)
+    else
+     true
+    )
 
    end_point = 
     if container.length is 0
-     top_y: dragdrop.offsetY, left_x: dragdrop.offsetX
+     if dragdrop.offsetY < 0 || dragdrop.offsetY > $(window).height() || dragdrop.offsetX < 0 || dragdrop.offsetX > $(window).width()
+      top_y: dragdrop.originalY, left_x: dragdrop.originalX
+     else
+      top_y: dragdrop.offsetY, left_x: dragdrop.offsetX
     else
      top_y: container[0].top_y, left_x: container[0].left_x
 
-   $("##{target_id}").css('cursor', 'default')
-    .animate({ top: end_point.top_y, left: end_point.left_x, opacity: 1 }) ###
+   $(@el).animate({ 
+    top: end_point.top_y, 
+    left: end_point.left_x, opacity: 1 
+   })
+
+   piece = new Puzzle.Models.Piece(
+    piece_id: $(@el).attr('id'), 
+    offset: { x: end_point.left_x, y: end_point.top_y }
+   )
+
+   @options.piece.save(piece, { silent: true, wait: true })

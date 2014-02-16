@@ -23,12 +23,16 @@ class State
       result_set
     end
 
-    def update_record session, id
+    def update_deviation session, id
       initial_deviation = $redis.hget("#{session}.pieces.#{id}", :deviation).to_i
       initial_deviation = initial_deviation == 360 ? 0 : initial_deviation
       current_deviation = initial_deviation + 90
       $redis.hset("#{session}.pieces.#{id}", :deviation, current_deviation)
       current_deviation
+    end
+
+    def update_offset session, id, offset
+      $redis.hmset("#{session}.pieces.#{id}", :x, offset[:x], :y, offset[:y])       
     end
   end
 end

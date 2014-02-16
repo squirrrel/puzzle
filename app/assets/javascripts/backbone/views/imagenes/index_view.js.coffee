@@ -1,7 +1,7 @@
-Puzzle.Views.Imagens ||= {}
+Puzzle.Views.Imagenes ||= {}
 
-class Puzzle.Views.Imagens.IndexView extends Backbone.View
-  template: JST["backbone/templates/imagens/index"]
+class Puzzle.Views.Imagenes.IndexView extends Backbone.View
+  template: JST["backbone/templates/imagenes/index"]
 
   events:
    'click .imagenes': 'servePuzzle'
@@ -42,8 +42,7 @@ class Puzzle.Views.Imagens.IndexView extends Backbone.View
    })
 
   display_puzzle: (model, response) =>
-   console.log 'Bye'
-   console.log @options.pieces.fetch()
+   @options.pieces.fetch()
 
   display_error: (model, response) =>
    console.log response
