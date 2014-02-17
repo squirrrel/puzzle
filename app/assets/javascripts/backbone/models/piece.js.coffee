@@ -1,6 +1,5 @@
 class Puzzle.Models.Piece extends Backbone.Model
-  defaults:
-    card: null
+  urlRoot: 'api/pieces'  
 
 class Puzzle.Collections.PiecesCollection extends Backbone.Collection
   model: Puzzle.Models.Piece

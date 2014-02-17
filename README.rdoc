@@ -46,9 +46,12 @@ OR: it can only be moved from the free zone onto the board and back to its origi
  3. Store states in Redis or whatever alive as long as the process is running. NICE
  4. Learn Sublime in depth
  5. Pry
- 7. Piece should be draggable only within screen, not outside DONE but scrolls must be removed
  9. Beautify game
  10. Enforce game rules
  11. Add divs coordinates from below the board.
  13. The dragged piece should be dragged above any other
- 14. The dragged piece cannot overlap any other after dragend otherwise it is dragged near or back
+ 14. The dragged piece cannot overlap any other after dragend otherwise it is dragged near or backard
+ 15. Board must be an object from objects as cells
+ 16. Imagenes must be objects as well
+
+

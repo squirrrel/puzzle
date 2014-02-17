@@ -1,6 +1,6 @@
 class Puzzle.Models.Imagen extends Backbone.Model
-  defaults:
-    card: null
+  urlRoot: 'api/imagenes'
+
 
 class Puzzle.Collections.ImagensCollection extends Backbone.Collection
   model: Puzzle.Models.Imagen
