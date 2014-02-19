@@ -3,49 +3,30 @@ Puzzle.Views.Imagenes ||= {}
 class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   template: JST["backbone/templates/imagenes/index"]
 
-  events:
-   'click .imagenes': 'servePuzzle'
-
   initialize: () ->
-    @options.pieces.bind('reset', @render)
     @options.imagenes.bind('reset', @render)
+    @options.pieces.bind('reset', @render)
 
   render: =>
    pieces = @options.pieces.toJSON()
    imagenes = @options.imagenes.toJSON()
-   $(@el).html(
-    @template(
-     imagenes: @toggleImages(pieces, imagenes), 
-     size: 40,
-     rows: 7,
-     columns: 13
-    )
-   )
+   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) )
+   @addBoardView()
+   @addImagenesView()
    @addPiecesView()
    return this
 
   addPiecesView: () =>
    pieces_views = new Puzzle.Views.Pieces.Pieces(pieces: @options.pieces)
-   $(@el).append(pieces_views.render().el) 
+   $(@el).append(pieces_views.render().el)
 
-  toggleImages: (pieces, imagenes) ->
-    if pieces.length is 0 then imagenes else []
+  addImagenesView: () =>
+   imagenes_views = new Puzzle.Views.Imagenes.Imagenes(imagenes: @options.imagenes, pieces: @options.pieces)
+   $(@el).append(imagenes_views.render().el)
 
-  servePuzzle: (event) ->
-   imagen_id = $('.imagenes').attr('id')
-   imagen = new Puzzle.Models.Imagen(imagen_id: imagen_id)
-   @options.imagenes.create(imagen, { 
-    silent: true, 
-    wait: true, 
-    success: @display_puzzle, 
-    error: @display_error 
-   })
-
-  display_puzzle: (model, response) =>
-   @options.pieces.fetch()
-
-  display_error: (model, response) =>
-   console.log response
+  addBoardView: () =>
+   board_views = new Puzzle.Views.Boards.Board(pieces: @options.pieces)
+   $(@el).append(board_views.render().el)
 
   drawCanvas: ->
     canvas = document.getElementById('testCanvas')

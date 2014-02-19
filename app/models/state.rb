@@ -7,7 +7,8 @@ class State
                      :id, piece[:id], 
                      :deviation, piece[:deviation],
                      :x, piece[:key],
-                     :y, piece[:value])
+                     :y, piece[:value],
+                     :order, piece[:order])
         $redis.sadd("#{session}.ids", piece[:id])
       end
     end

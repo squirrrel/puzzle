@@ -21,6 +21,7 @@ class Piece < CouchRest::Model::Base
   class << self
     def get_and_transform_set id
       set = get_all_child_pieces(id).compact
+      puts set
       add_deviation_to set
 			add_offset_to set, id       
       set.shuffle!
@@ -29,12 +30,15 @@ class Piece < CouchRest::Model::Base
     private
 
   	def get_all_child_pieces picture_id
+      i = 1
   		pieces.rows.map! do |row|
   			piece = {} 
   			piece[:title] = row.key 
         piece[:id] = row.id
+        piece[:order] = i
+        i = i + 1
   			piece.with_indifferent_access if row.value == picture_id
-  		end
+      end
   	end
 
     def add_offset_to set, id

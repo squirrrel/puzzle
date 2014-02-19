@@ -1,9 +1,1 @@
-<% for(var i=0; i<imagenes.length; i++) { %>
-<img src="/assets/<%= imagenes[i].title %>" height="200" width="400" class='imagenes' id ="<%= imagenes[i].id %>">
-<% } %>
-<div id='board' style="position:relative; margin: 200px auto;border-left:none;border-bottom:none;border-top: 1px solid #DBDBDB;border-right: 1px solid #DBDBDB; width:<%= columns*size %>px;height:<%= rows*size %>px;">
-<% for(var i=0; i<columns*rows; i++) { %>
-<div class="cell" style="float:left;border-left: 1px solid #DBDBDB;border-bottom: 1px solid #DBDBDB; width:<%= size-1 %>px;height:<%= size-1 %>px;"></div>
-<% } %>
-</div>
 <!--<canvas id="testCanvas"  width="500" height="500"></canvas>--> 

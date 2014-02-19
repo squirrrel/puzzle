@@ -9,11 +9,12 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .bind('dragstart', @dragStart)
     .bind('drag', @dragPiece)
     .bind('dragend', @dragEnd)
-   @piece = @options.piece.toJSON() 
+   @piece = @options.piece.toJSON()
 
   render: =>
    $(@el).attr('id', @piece.id)
     .attr('class', 'piece-of-puzzle')
+    .attr('alt',"#{@piece.order}")
     .attr('src', "/assets/#{@piece.title}")
     .attr('height', '40')
     .attr('width', '40')
@@ -36,10 +37,13 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    })
 
   reflect_rotation: (model, response) =>
-   console.log response.current_deviation
    $(@el).css('-webkit-transform',"rotate(#{response.current_deviation}deg)")
-   .css('transform',"rotate(#{response.current_deviation}deg)")
-   .css('-moz-transform', "rotate(#{response.current_deviation}deg)")
+    .css('transform',"rotate(#{response.current_deviation}deg)")
+    .css('-moz-transform', "rotate(#{response.current_deviation}deg)")
+   if $(@el).hasClass('ids_matched') is true && response.current_deviation is 360
+    console.log 'matched'
+   else
+    console.log 'unmatched'
 
   get_error: (model, response) =>
    console.log response
@@ -66,7 +70,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     delta_x = dragdrop.offsetX - $(@).offset().left
     delta_y = dragdrop.offsetY - $(@).offset().top
     if delta_x >= -20 && delta_x <= 20 && delta_y >= -20 && delta_y <= 20
-     matched_cells_container.push(left_x: $(@).offset().left, top_y: $(@).offset().top)
+     matched_cells_container.push(left_x: $(@).offset().left, top_y: $(@).offset().top, id: $(@).attr('id'))
     else
      true
     )
@@ -85,7 +89,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
       else
        true
      )
-     console.log matched_pieces_container
+
      if dragdrop.offsetY < 0 || 
         dragdrop.offsetY > $(window).height() - h_percentage || 
         dragdrop.offsetX < 0 || 
@@ -116,5 +120,15 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     id: $(@el).attr('id'), 
     offset: { x: end_point.left_x, y: end_point.top_y }
    )
-
    piece.save(piece, { silent: true, wait: true })
+   console.log matched_cells_container.length
+   if matched_cells_container.length is 1 && 
+      $(dragdrop.target).attr('alt') is matched_cells_container[0].id &&
+      ($(dragdrop.target).attr('style').match(/\(360deg\)/) || 
+      $(dragdrop.target).attr('style').match(/\(0deg\)/))
+    $(dragdrop.target).addClass('ids_matched')
+    console.log 'matched'
+   else if matched_cells_container.length is 1 && $(dragdrop.target).attr('alt') is matched_cells_container[0].id
+    $(dragdrop.target).addClass('ids_matched')
+   else 
+    true
