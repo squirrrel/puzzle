@@ -4,12 +4,13 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
   tagName: "img"
 
   initialize: () ->
-   $(@el).bind('click', @rotatePieceOnClick)
-    .bind('draginit', @dragInit)
-    .bind('dragstart', @dragStart)
-    .bind('drag', @dragPiece)
-    .bind('dragend', @dragEnd)
    @piece = @options.piece.toJSON()
+   unless @piece.matched
+    $(@el).bind('click', @rotatePieceOnClick)
+     .bind('draginit', @dragInit)
+     .bind('dragstart', @dragStart)
+     .bind('drag', @dragPiece)
+     .bind('dragend', @dragEnd)
 
   render: =>
    $(@el).attr('id', @piece.id)
@@ -27,9 +28,10 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    return this
 
   rotatePieceOnClick: (event) =>
-   piece = new Puzzle.Models.Piece(id: $(@el).attr('id'))
+   console.log 'clicked'
+   session = new Puzzle.Models.Session(id: $(@el).attr('id'))
 
-   piece.save(piece, { 
+   session.save(session, { 
     silent: true, 
     wait: true, 
     success: @reflect_rotation, 
@@ -41,9 +43,18 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css('transform',"rotate(#{response.current_deviation}deg)")
     .css('-moz-transform', "rotate(#{response.current_deviation}deg)")
    if $(@el).hasClass('ids_matched') is true && response.current_deviation is 360
-    console.log 'matched'
+    $(@el).unbind('click')
+     .unbind('draginit')
+     .unbind('dragstart')
+     .unbind('drag')
+     .unbind('dragend')
+    $(@el).removeClass('ids_matched')
+    $(@el).addClass('matched')
+    session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
+    session.save(session, { silent: true, wait: true })
+    console.log 'puzzle solved' if $('.matched').length is @options.pieces.length
    else
-    console.log 'unmatched'
+    true
 
   get_error: (model, response) =>
    console.log response
@@ -116,18 +127,27 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     left: end_point.left_x, opacity: 1 
    })
 
-   piece = new Puzzle.Models.Piece(
+   session = new Puzzle.Models.Session(
     id: $(@el).attr('id'), 
     offset: { x: end_point.left_x, y: end_point.top_y }
    )
-   piece.save(piece, { silent: true, wait: true })
+   session.save(session, { silent: true, wait: true })
    console.log matched_cells_container.length
    if matched_cells_container.length is 1 && 
       $(dragdrop.target).attr('alt') is matched_cells_container[0].id &&
       ($(dragdrop.target).attr('style').match(/\(360deg\)/) || 
       $(dragdrop.target).attr('style').match(/\(0deg\)/))
     $(dragdrop.target).addClass('ids_matched')
-    console.log 'matched'
+    $(@el).unbind('click')
+    .unbind('draginit')
+    .unbind('dragstart')
+    .unbind('drag')
+    .unbind('dragend')
+    $(@el).removeClass('ids_matched')
+    $(@el).addClass('matched')
+    session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
+    session.save(session, { silent: true, wait: true })
+    console.log 'puzzle solved' if $('.matched').length is @options.pieces.length
    else if matched_cells_container.length is 1 && $(dragdrop.target).attr('alt') is matched_cells_container[0].id
     $(dragdrop.target).addClass('ids_matched')
    else 

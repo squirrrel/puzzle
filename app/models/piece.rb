@@ -6,14 +6,15 @@ class Piece < CouchRest::Model::Base
 	property :title,      String
 	property :imagen_id,  String
   property :deviation,  String
+  property :order,      String
 	property :created_at, String, default: Time.now.strftime('%d-%m-%Y,%l:%M %p')
 
 	design do
 		view :pieces,
 			map:
 				"function(doc) {
-					if(doc['type'] == 'Piece' && doc.title && doc.imagen_id) {
-						emit(doc.title, doc.imagen_id);
+					if(doc['type'] == 'Piece' && doc.title && doc.order && doc.imagen_id) {
+						emit(doc.order, [doc.imagen_id, doc.title]);
 					}
 				}"
 	end
@@ -30,14 +31,12 @@ class Piece < CouchRest::Model::Base
     private
 
   	def get_all_child_pieces picture_id
-      i = 1
   		pieces.rows.map! do |row|
   			piece = {} 
-  			piece[:title] = row.key 
+  			piece[:title] = row.value[1] 
         piece[:id] = row.id
-        piece[:order] = i
-        i = i + 1
-  			piece.with_indifferent_access if row.value == picture_id
+        piece[:order]  = row.key
+  			piece.with_indifferent_access if row.value[0] == picture_id
       end
   	end
 
@@ -63,6 +62,7 @@ class Piece < CouchRest::Model::Base
 
 	# EXPLAIN: The method creates set of piece records based on some predefined parameters
 	# def self.create_pieces
+ #    i = 1
 	# 	{
 	# 		"piece0_0.jpg"=>'ba546f2e47d2a915c3ffff08503e5b86',
 	# 		"piece0_1.jpg"=>'ba546f2e47d2a915c3ffff08503e5b86',
@@ -157,7 +157,8 @@ class Piece < CouchRest::Model::Base
 	# 		"piece900_12.jpg"=>'ba546f2e47d2a915c3ffff08503e5b86'
 	# 	}
 	# 	 .map do |ttl,id|
-	# 		create!(title: ttl, imagen_id: id)
+	# 		create!(title: ttl, imagen_id: id, order: i)
+ #      i = i + 1 
 	# 	end
 	# end
 end	

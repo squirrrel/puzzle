@@ -9,14 +9,11 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).bind('click', @servePuzzle)
 
   render: =>
-   if @options.pieces.length is 0
-    $(@el).attr('src', "/assets/#{@options.imagen.toJSON().title}")
-    $(@el).css('height','200')
-    $(@el).css('width','400')
-    $(@el).attr('class','imagenes')
-    $(@el).attr('id',"#{@options.imagen.toJSON().id}")
-   else
-    []
+   $(@el).attr('src', "/assets/#{@options.imagen.toJSON().title}")
+    .attr('id',"#{@options.imagen.toJSON().id}")
+    .attr('class','imagenes')
+    .css('height','200')
+    .css('width','400')
    return this
 
   servePuzzle: (event) =>

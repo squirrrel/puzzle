@@ -1,4 +1,4 @@
-class State
+class Session
   class << self
     def create_record session, pieces
       pieces.each do |piece|
@@ -14,11 +14,15 @@ class State
     end
 
     def get_pieces_for session
-      item_ids = $redis.smembers("#{session}.ids") 
       result_set = []
+      item_ids = $redis.smembers("#{session}.ids") 
 
-      item_ids.each do |id|
-        result_set << $redis.hgetall("#{session}.pieces.#{id}")
+      if item_ids
+        item_ids.each do |id|
+          result_set << $redis.hgetall("#{session}.pieces.#{id}")
+        end
+      else
+        []
       end
 
       result_set
@@ -34,6 +38,18 @@ class State
 
     def update_offset session, id, offset
       $redis.hmset("#{session}.pieces.#{id}", :x, offset[:x], :y, offset[:y])       
+    end
+
+    def update_match session, id
+      $redis.hset("#{session}.pieces.#{id}", :matched, 'matched')      
+    end
+
+    def destroy_record session
+      item_ids = $redis.smembers("#{session}.ids")
+      item_ids.each do |id|
+        $redis.del("#{session}.pieces.#{id}")
+      end
+      $redis.del("#{session}.ids")
     end
   end
 end

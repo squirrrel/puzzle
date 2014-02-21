@@ -16,10 +16,7 @@ class Puzzle.Views.Boards.Board extends Backbone.View
     .css('border-right', '1px solid #DBDBDB')
     .css('width', '520px')
     .css('height', '280px')
-   if @options.pieces.length isnt 0
     @addCellsView()
-   else
-    $(@el).css('display', 'none')
    return this
 
   addCellsView: () =>

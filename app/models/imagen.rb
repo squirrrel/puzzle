@@ -38,6 +38,7 @@ class Imagen < CouchRest::Model::Base
 	#  creates corresponding Imagen objects in the DB
 	# def self.create_imagenes
 	# 	create!(
+	# 	  id: 'ba546f2e47d2a915c3ffff08503e5b86',
 	# 		title: 'geisha_fragments_1.jpg',
 	# 		category: 'Art',
 	# 		subcategory: 'Japanese'
