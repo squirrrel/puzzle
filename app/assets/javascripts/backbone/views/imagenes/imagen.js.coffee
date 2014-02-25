@@ -14,6 +14,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     .attr('class','imagenes')
     .css('height','200')
     .css('width','400')
+    .css('cursor', 'pointer')
    return this
 
   servePuzzle: (event) =>

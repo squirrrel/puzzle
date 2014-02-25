@@ -52,11 +52,15 @@ OR: it can only be moved from the free zone onto the board and back to its origi
  14. The dragged piece cannot overlap any other after dragend otherwise it is dragged near or backard
 
 SATERDAY:
- 14. Impose a rule for the Cover
- 15. Refactor piece view
+ 1. Refactor piece view
+ 2. Add all the pictures from collection to the app, save them in the db
+ 3. Cut all images, save pieces to the db
+ 3. Fix bug with the cover not overlapping the pieces
+ 4. Pieces should be bigger
 
  17. Cut all of the images from my collection wisely
- 18. Beautify
+ 18. Beautify Cover div should have a pseudo-button
  19. RELASE 1.1 - time should be limitted and there should be a time out to get user more competitive
  Some score rating should be present as well...perhaps...
-
+ 20. RELEASE 1.2 - user should be able to add some new images to gallery
+ 21. RELEASE 1.3 - pieces should resemble to puzzle curly pieces no squares anymore

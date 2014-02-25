@@ -25,10 +25,13 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css('position', "absolute")
     .css('left', "#{@piece.x}px")
     .css('top', "#{@piece.y}px")
+   if @piece.matched is 'matched'
+    $(@el).addClass('matched')
+   else if @piece.matched is 'half-matched'
+    $(@el).addClass('half-matched')
    return this
 
   rotatePieceOnClick: (event) =>
-   console.log 'clicked'
    session = new Puzzle.Models.Session(id: $(@el).attr('id'))
 
    session.save(session, { 
@@ -39,22 +42,36 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    })
 
   reflect_rotation: (model, response) =>
+   ### Rotate piece ###
    $(@el).css('-webkit-transform',"rotate(#{response.current_deviation}deg)")
     .css('transform',"rotate(#{response.current_deviation}deg)")
     .css('-moz-transform', "rotate(#{response.current_deviation}deg)")
-   if $(@el).hasClass('ids_matched') is true && response.current_deviation is 360
+
+   ### Given the piece matched a corresponding cell ###
+   if $(@el).hasClass('half-matched') is true && 
+      response.current_deviation is 360   
+    ### Unbind all handlers to freeze the piece ###
     $(@el).unbind('click')
      .unbind('draginit')
      .unbind('dragstart')
      .unbind('drag')
      .unbind('dragend')
-    $(@el).removeClass('ids_matched')
-    $(@el).addClass('matched')
+
+    ### Modify piece's property accordingly and add the 'matched' class ###
+    $(@el).removeClass('half-matched')
+     .addClass('matched')
+     .css('cursor', 'default')
+
+    ### Save matched property to back-end ###
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
     session.save(session, { silent: true, wait: true })
-    console.log 'puzzle solved' if $('.matched').length is @options.pieces.length
-   else
-    true
+    
+    ### Verify if puzzle is solved and render the cover view if appropriate ###
+    console.log $('.matched').length
+    if $('.matched').length is @options.pieces.length
+     console.log 'matched all'
+     cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
+     $('body').append(cover_view.render().el)
 
   get_error: (model, response) =>
    console.log response
@@ -71,84 +88,104 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
   
   dragEnd: (event, dragdrop) =>
+   ### Minor modifications ###
    $(@el).css('cursor', 'pointer')
    $(dragdrop.proxy).remove()
+
+   ### Initialize containers ###
    matched_cells_container = new Array
    matched_cell_pieces_container = new Array
    matched_pieces_container = new Array
 
+   ### Get auxiliary data for restricting 'drag-and-drop' zone ###
+   w_percentage = 3*$(window).width()/100
+   h_percentage = 6*$(window).height()/100
+
+   ### Auxiliary data ###
    $('.cell').each(()->
     delta_x = dragdrop.offsetX - $(@).offset().left
     delta_y = dragdrop.offsetY - $(@).offset().top
     if delta_x >= -20 && delta_x <= 20 && delta_y >= -20 && delta_y <= 20
-     matched_cells_container.push(left_x: $(@).offset().left, top_y: $(@).offset().top, id: $(@).attr('id'))
-    else
-     true
-    )
+     matched_cells_container.push(
+      left_x: $(@).offset().left, 
+      top_y: $(@).offset().top, 
+      id: $(@).attr('id')
+     )
+   )
+   
+   ### Auxiliary data ###
+   $('.piece-of-puzzle').each(()->
+    unless $(@).attr('id') is $(dragdrop.target).attr('id')
+     if $(@).offset().left >= dragdrop.offsetX - 39 && 
+        $(@).offset().left <= dragdrop.offsetX + 39 && 
+        $(@).offset().top >= dragdrop.offsetY - 39 && 
+        $(@).offset().top <= dragdrop.offsetY + 39
+      matched_pieces_container.push('overlapped')
+   )
 
-   w_percentage = 3*$(window).width()/100
-   h_percentage = 6*$(window).height()/100
+   ### Auxiliary data ###
+   $('.piece-of-puzzle').each(()->
+    unless matched_cells_container.length is 0
+     if $(@).offset().left is matched_cells_container[0].left_x && 
+        $(@).offset().top is matched_cells_container[0].top_y
+      matched_cell_pieces_container.push('overlapped')
+   )
+
+   ### GET END-POINT FOR THE TARGET PIECE: ###
    end_point =
     if matched_cells_container.length is 0
-     $('.piece-of-puzzle').each(()->
-      if $(@).attr('id') isnt $(dragdrop.target).attr('id')
-       if $(@).offset().left >= dragdrop.offsetX - 39 && $(@).offset().left <= dragdrop.offsetX + 39 &&
-          $(@).offset().top >= dragdrop.offsetY - 39 && $(@).offset().top <= dragdrop.offsetY + 39
-        matched_pieces_container.push('overlapped')
-       else
-        true
-      else
-       true
-     )
-
-     if dragdrop.offsetY < 0 || 
-        dragdrop.offsetY > $(window).height() - h_percentage || 
-        dragdrop.offsetX < 0 || 
-        dragdrop.offsetX > $(window).width() - w_percentage ||
+     if dragdrop.offsetY < 0 || dragdrop.offsetY > $(window).height() - h_percentage || 
+        dragdrop.offsetX < 0 || dragdrop.offsetX > $(window).width() - w_percentage || 
         matched_pieces_container.length is 1
       top_y: dragdrop.originalY, left_x: dragdrop.originalX
      else
       top_y: dragdrop.offsetY, left_x: dragdrop.offsetX
     else
-     $('.piece-of-puzzle').each(()->
-      if $(@).offset().left is matched_cells_container[0].left_x && 
-         $(@).offset().top is matched_cells_container[0].top_y
-       matched_cell_pieces_container.push('overlapped')
-      else
-       true
-     )
      if matched_cell_pieces_container.length is 1 || matched_pieces_container is 1
       top_y: dragdrop.originalY, left_x: dragdrop.originalX
      else
       top_y: matched_cells_container[0].top_y, left_x: matched_cells_container[0].left_x
 
-   $(@el).animate({ 
-    top: end_point.top_y, 
-    left: end_point.left_x, opacity: 1 
-   })
+   ### USE END-POINT RESULT TO MOVE THE PIECE ### 
+   $(@el).css('z-index', '10')
+    .animate({ 
+     top: end_point.top_y, 
+     left: end_point.left_x, opacity: 1 
+    })
 
+   ### Save new piece's coordinates to backend ###
    session = new Puzzle.Models.Session(
     id: $(@el).attr('id'), 
     offset: { x: end_point.left_x, y: end_point.top_y }
    )
    session.save(session, { silent: true, wait: true })
-   console.log matched_cells_container.length
+
+   ### FREEZE THE PIECE GIVEN IT MATCHED 100% ###
+   ### MARK PIECE AS HALF-MATCHED for future clicks GIVEN IT IS 50% MATCHED ###   
    if matched_cells_container.length is 1 && 
-      $(dragdrop.target).attr('alt') is matched_cells_container[0].id &&
-      ($(dragdrop.target).attr('style').match(/\(360deg\)/) || 
-      $(dragdrop.target).attr('style').match(/\(0deg\)/))
-    $(dragdrop.target).addClass('ids_matched')
+      $(dragdrop.target).attr('alt') is matched_cells_container[0].id && 
+      $(dragdrop.target).attr('style').match(/\(360deg\)/)
     $(@el).unbind('click')
-    .unbind('draginit')
-    .unbind('dragstart')
-    .unbind('drag')
-    .unbind('dragend')
-    $(@el).removeClass('ids_matched')
+     .unbind('draginit')
+     .unbind('dragstart')
+     .unbind('drag')
+     .unbind('dragend')
+    
     $(@el).addClass('matched')
+     .css('cursor', 'default')
+    
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
     session.save(session, { silent: true, wait: true })
-    console.log 'puzzle solved' if $('.matched').length is @options.pieces.length
-   else if matched_cells_container.length is 1 && $(dragdrop.target).attr('alt') is matched_cells_container[0].id
-    $(dragdrop.target).addClass('ids_matched')
-   else 
-    true
+    
+    console.log $('.matched').length
+    if $('.matched').length is @options.pieces.length
+     console.log 'all matched'
+     cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
+     $('body').append(cover_view.render().el)
+   
+   else if matched_cells_container.length is 1 && 
+           $(dragdrop.target).attr('alt') is matched_cells_container[0].id
+    $(dragdrop.target).addClass('half-matched')
+
+    session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'half-matched')
+    session.save(session, { silent: true, wait: true })

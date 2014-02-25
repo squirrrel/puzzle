@@ -5,6 +5,8 @@ class Puzzle.Views.Boards.Board extends Backbone.View
 
   initialize: () ->
    @options.pieces.bind('reset', @render)
+   $(@el).bind('mouseover', @registerButton)
+    .bind('mouseout', @unregisterButton)
 
   render: =>
    $(@el).attr('id', 'board')
