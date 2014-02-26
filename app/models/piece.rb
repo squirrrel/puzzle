@@ -50,7 +50,7 @@ class Piece < CouchRest::Model::Base
     end
 
   	def add_deviation_to set
-      degrees = [-90, 360, 90, 180, 360]
+      degrees = [270, 360, 90, 180, 360]
       set.each do |piece|
         deviation = piece[:deviation] = degrees[rand(5)] 
         get(piece[:id]).update_attributes(deviation: deviation)

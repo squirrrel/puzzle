@@ -59,8 +59,8 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
     ### Modify piece's property accordingly and add the 'matched' class ###
     $(@el).removeClass('half-matched')
-     .addClass('matched')
-     .css('cursor', 'default')
+    $(@el).addClass('matched')
+    $(@el).css('cursor', 'default')
 
     ### Save matched property to back-end ###
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
@@ -172,7 +172,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      .unbind('dragend')
     
     $(@el).addClass('matched')
-     .css('cursor', 'default')
+    $(@el).css('cursor', 'default')
     
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
     session.save(session, { silent: true, wait: true })
