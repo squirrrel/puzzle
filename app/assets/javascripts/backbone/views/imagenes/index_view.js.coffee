@@ -6,15 +6,17 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   initialize: () ->
    @options.imagenes.bind('reset', @render)
    @options.pieces.bind('reset', @render)
+   @options.categories.bind('reset', @render)
 
   render: =>
    pieces = @options.pieces.toJSON()
    imagenes = @options.imagenes.toJSON()
-   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) )  
+   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) )
    @addCover()
-   @addImagenesView()   
+   @addImagenesView()
    @addBoardView()
    @addPiecesView()
+   @addCategoriesView()
    return this
 
   addPiecesView: () =>
@@ -24,10 +26,14 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   addImagenesView: () =>
    if @options.pieces.length is 0
     imagenes_view = new Puzzle.Views.Imagenes.Imagenes(
-     imagenes: @options.imagenes, 
+     imagenes: @options.imagenes,
      pieces: @options.pieces
     )
     $(@el).append(imagenes_view.render().el)
+
+  addCategoriesView: () =>
+    categories_view = new Puzzle.Views.Addons.Categories(categories: @options.categories)
+    $(@el).append(categories_view.render().el)
 
   addBoardView: () =>
    unless @options.pieces.length is 0
@@ -37,7 +43,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   addCover: () =>
    unless @options.pieces.length is 0
     matched_pieces = []
-    _.map(@options.pieces.toJSON(), 
+    _.map(@options.pieces.toJSON(),
           (piece)-> matched_pieces.push(piece.matched) unless piece.matched is undefined )
     console.log matched_pieces.length
     if matched_pieces.length is @options.pieces.length

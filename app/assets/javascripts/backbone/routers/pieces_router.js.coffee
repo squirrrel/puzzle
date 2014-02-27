@@ -4,11 +4,14 @@ class Puzzle.Routers.PiecesRouter extends Backbone.Router
 
   index: ->
     console.log @pieces = new Puzzle.Collections.SessionsCollection()
-    @imagenes = new Puzzle.Collections.ImagensCollection()
+    console.log @imagenes = new Puzzle.Collections.ImagensCollection()
+    @categories = new Puzzle.Collections.CategoriesCollection()
+    @categories.fetch()
     @pieces.fetch()
     @imagenes.fetch()
     @view = new Puzzle.Views.Imagenes.IndexView(
      pieces: @pieces,
-     imagenes: @imagenes
+     imagenes: @imagenes,
+     categories: @categories
     )
     $("body").html(@view.render().el)

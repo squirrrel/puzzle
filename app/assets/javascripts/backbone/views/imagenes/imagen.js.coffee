@@ -15,7 +15,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     .css('height','200')
     .css('width','400')
     .css('cursor', 'pointer')
-   return this
+    .css('margin', '14px 14px 14px')
+    return this
 
   servePuzzle: (event) =>
    imagen_id = $(@el).attr('id')

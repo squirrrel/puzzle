@@ -9,7 +9,7 @@ include Magick
 class Imagen < CouchRest::Model::Base
 	property :title,        String
 	property :category,     String
-	property :subcategory,  String
+	property :subcategory,  String, default: 'none'
 	property :complicated?, TrueClass, default: false
 	property :created_at,   String, default: Time.now.strftime('%d-%m-%Y,%l:%M %p')
 	# property :number_of_x_cuts
@@ -19,21 +19,45 @@ class Imagen < CouchRest::Model::Base
 		view :imagenes,
 			map:
 				"function(doc) {
-					if(doc['type'] == 'Imagen' && doc.title) {
-						emit(doc.title, doc._id);
+					if(doc['type'] == 'Imagen' && doc.title && doc.category && doc.subcategory) {
+						emit(doc.title, [doc.category, doc.subcategory]);
 					}
-				}"		
+				}"
+
+		view :categories,
+			map:
+				"function(doc) {
+					if(doc['type'] == 'Imagen' && doc.category){
+						emit(doc.category, null);
+					}
+				}"
 	end
 
-	def self.get_all
-		imagenes.rows.map! do |row|
-			imagen = {}
-			imagen[:title] = row.key
-			imagen[:id] = row.value
-			imagen
+  class << self
+		def get_all
+			imagenes.rows.map! do |row|
+				imagen = {}
+				imagen[:id] = row.id
+				imagen[:title] = row.key
+				imagen[:category] = row.value[0]
+				imagen[:subcategory] = row.value[1] unless row.value[1] == 'none' 
+
+				imagen
+			end
+		end
+
+		#TODO: write REDUCE function for categories view
+		def get_categories
+			[
+			{category: 'Art'}, {category: 'Cars'}, {category: 'Cartoons'}, {category: 'Cats'}, 
+				{category: 'Cultures'}, {category: 'Christmas postcards'},
+				{category: 'Japan'}, {category: 'Modern arquitecture'},
+				{category: 'Movies'}, {category: 'Postcards'}, {category:'Skiing'}
+			]
 		end
 	end
 
+	private
 	# EXPLAIN: The method iterates through hashes, and based on their key-value pairs,
 	#  creates corresponding Imagen objects in the DB
 	def self.create_imagenes
@@ -223,14 +247,19 @@ class Imagen < CouchRest::Model::Base
 			{ title: 'hungergames_10.jpg', category: 'Movies', subcategory: 'The hunger games'},
 			{ title: 'hungergames_11.jpg', category: 'Movies', subcategory: 'The hunger games'}
 		].map do |image|
-	 		create!(
-	 			title: image[:title],
-	 			category: image[:category],
-	 			subcategory: image[:subcategory]
-	  	)
+			new_record = 
+				if image[:subcategory]
+ 					{title: image[:title],
+ 				 	 category: image[:category],
+ 				 	 subcategory: image[:subcategory]}		
+				else
+ 					{title: image[:title],
+ 					 category: image[:category]}
+	 	  	end
+	 	  create!(new_record)
+	 	end
 	end
 
-	private
 	# EXPLAIN: The method will be useful for cutting a picture into pieces which will be then referenced 
 	#  by corresponding database records
 	#
