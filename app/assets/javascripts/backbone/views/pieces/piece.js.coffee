@@ -13,8 +13,6 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      .bind('dragend', @dragEnd)
 
   render: =>
-   unless @options.pieces is 0
-    $('body, html').css('overflow', 'hidden')
    $(@el).attr('id', @piece.id)
     .attr('class', 'piece-of-puzzle')
     .attr('alt',"#{@piece.order}")

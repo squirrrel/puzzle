@@ -7,6 +7,7 @@ class Puzzle.Views.Imagenes.Imagenes extends Backbone.View
    @options.pieces.bind('reset', @render)
 
   render: =>
+   $('html').css('background', "url('assets/dark_exa.png') repeat left top")
    @addAll()
    return this
 
@@ -19,4 +20,4 @@ class Puzzle.Views.Imagenes.Imagenes extends Backbone.View
     imagen: imagen, 
     pieces: @options.pieces
    )
-   $("div##{imagen.get('category')}").append(imagen_view.render().el)
+   $(@el).append(imagen_view.render().el)

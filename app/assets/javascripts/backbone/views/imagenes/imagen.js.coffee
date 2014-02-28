@@ -9,18 +9,18 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).bind('click', @servePuzzle)
 
   render: =>
-   $(@el).attr('src', "/assets/#{@options.imagen.toJSON().title}")
+   $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
     .attr('id',"#{@options.imagen.toJSON().id}")
     .attr('class','imagenes')
     .css('height','200')
     .css('width','400')
     .css('cursor', 'pointer')
     .css('margin', '14px 14px 14px')
-    return this
+   return this
 
   servePuzzle: (event) =>
    imagen_id = $(@el).attr('id')
-   imagen = new Puzzle.Models.Imagen(imagen_id: imagen_id)
+   imagen = new Puzzle.Models.Session(imagen_id: imagen_id)
    imagen.save(imagen, { 
     silent: true, 
     wait: true, 
