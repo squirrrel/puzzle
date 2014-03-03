@@ -12,8 +12,8 @@ class Puzzle.Views.Cells.Cell extends Backbone.View
     $(@el).attr('id', "#{@options.id}")
     $(@el).attr('class', 'cell')
     $(@el).css('float','left')
-    $(@el).css('border-left','1px solid #DBDBDB')
-    $(@el).css('border-bottom','1px solid #DBDBDB')
+    $(@el).css('border-left','1px dotted rgba(105,105,105,0.65)')
+    $(@el).css('border-bottom','1px dotted rgba(105,105,105,0.65)')
     $(@el).css('width',"#{40 - 1}px")
     $(@el).css('height',"#{40 - 1}px")
    else

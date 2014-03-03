@@ -18,6 +18,10 @@ class Puzzle.Views.Boards.Board extends Backbone.View
     .css('border-right', '1px solid #DBDBDB')
     .css('width', '520px')
     .css('height', '280px')
+    .css('background-color', 'rgba(255,255,255,0.3)')
+    .css('box-shadow', '0px 0px 12px 4px rgba(34, 2, 0, 0.30)')
+    .css('-moz-box-shadow','0px 0px 12px 4px rgba(34, 2, 0, 0.30)')
+    .css('-webkit-box-shadow','0px 0px 12px 4px rgba(34, 2, 0, 0.30)')
     @addCellsView()
    return this
 

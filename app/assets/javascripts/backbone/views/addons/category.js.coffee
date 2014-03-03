@@ -32,7 +32,7 @@ class Puzzle.Views.Addons.Category extends Backbone.View
   addImagenesView: () =>
    if @options.pieces.length is 0
     category_images = 
-     @options.imagenes.where({ category: "#{@category}"})
+     @options.imagenes.where({ category: "#{@category}" })
     
     collection = new Puzzle.Collections.ImagensCollection(category_images)
     

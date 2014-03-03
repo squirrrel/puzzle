@@ -6,8 +6,6 @@ class Puzzle.Views.Pieces.Pieces extends Backbone.View
    @options.pieces.bind('reset', @render)
 
   render: =>
-   $('html').css('background', "url('assets/skulls.png') repeat left top")
-   $('body, html').css('overflow', 'hidden')
    @addAll()
    return this
 

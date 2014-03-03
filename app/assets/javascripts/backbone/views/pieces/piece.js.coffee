@@ -57,6 +57,9 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      .unbind('drag')
      .unbind('dragend')
 
+    @lower_mark_view.remove()
+    @upper_mark_view.remove()
+
     ### Modify piece's property accordingly and add the 'matched' class ###
     $(@el).removeClass('half-matched')
     $(@el).addClass('matched')
@@ -79,14 +82,30 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
   dragInit: (event, dragdrop) =>
 
   dragStart: (event, dragdrop) =>
+   if @lower_mark_view && @upper_mark_view 
+    @lower_mark_view.remove()
+    @upper_mark_view.remove()  
    $(@el).css('cursor', 'move')
    false if !$(dragdrop.target).is('.handle')
    $(@el).css('opacity', .5).clone().insertAfter(@el)
-  
+
   dragPiece: (event, dragdrop) =>
+   matched_cells_container = [] 
+   $('.cell').each(()->
+    delta_x = dragdrop.offsetX - $(@).offset().left
+    delta_y = dragdrop.offsetY - $(@).offset().top
+    if delta_x >= -20 && delta_x <= 20 && delta_y >= -20 && delta_y <= 20
+     matched_cells_container.push(id: $(@).attr('id'))
+   )
+
+   unless matched_cells_container.length is 0
+    id = matched_cells_container[0].id
+    $(".cell").css('background-color', 'rgba(255,255,255,0.0')
+    $("##{id}").css('background-color','rgba(255,195,122,0.5)')
+
    $(dragdrop.proxy).css('z-index', '10')
     .css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
-  
+
   dragEnd: (event, dragdrop) =>
    ### Minor modifications ###
    $(@el).css('cursor', 'pointer')
@@ -134,6 +153,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    ### GET END-POINT FOR THE TARGET PIECE: ###
    end_point =
     if matched_cells_container.length is 0
+     $(".cell").css('background-color', 'rgba(255,255,255,0.0')
      if dragdrop.offsetY < 0 || dragdrop.offsetY > $(window).height() - h_percentage || 
         dragdrop.offsetX < 0 || dragdrop.offsetX > $(window).width() - w_percentage || 
         matched_pieces_container.length is 1
@@ -161,7 +181,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    session.save(session, { silent: true, wait: true })
 
    ### FREEZE THE PIECE GIVEN IT MATCHED 100% ###
-   ### MARK PIECE AS HALF-MATCHED for future clicks GIVEN IT IS 50% MATCHED ###   
+   ### MARK PIECE AS HALF-MATCHED for future clicks GIVEN IT IS 50% MATCHED ###
    if matched_cells_container.length is 1 && 
       $(dragdrop.target).attr('alt') is matched_cells_container[0].id && 
       $(dragdrop.target).attr('style').match(/\(360deg\)/)
@@ -170,6 +190,9 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      .unbind('dragstart')
      .unbind('drag')
      .unbind('dragend')
+
+    @lower_mark_view.remove()
+    @upper_mark_view.remove()
     
     $(@el).addClass('matched')
     $(@el).css('cursor', 'default')
@@ -187,5 +210,38 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
            $(dragdrop.target).attr('alt') is matched_cells_container[0].id
     $(dragdrop.target).addClass('half-matched')
 
+    @upper_mark_view = 
+     new Puzzle.Views.Addons.UpperMark(
+      piece_top: end_point.top_y, 
+      piece_bottom: end_point.left_x,
+      pieces_width: $(@el).width()
+     )
+    @lower_mark_view =
+     new Puzzle.Views.Addons.LowerMark(
+      piece_top: end_point.top_y, 
+      piece_bottom: end_point.left_x,
+      pieces_width: $(@el).width()
+     )
+
+    $('body').append(@lower_mark_view.render().el)
+    $('body').append(@upper_mark_view.render().el)
+
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'half-matched')
     session.save(session, { silent: true, wait: true })
+
+   else if matched_cells_container.length is 1
+    @upper_mark_view = 
+     new Puzzle.Views.Addons.UpperMark(
+      piece_top: end_point.top_y, 
+      piece_bottom: end_point.left_x,
+      pieces_width: $(@el).width()
+     )
+    @lower_mark_view =
+     new Puzzle.Views.Addons.LowerMark(
+      piece_top: end_point.top_y, 
+      piece_bottom: end_point.left_x,
+      pieces_width: $(@el).width()
+     )
+
+    $('body').append(@lower_mark_view.render().el)
+    $('body').append(@upper_mark_view.render().el)

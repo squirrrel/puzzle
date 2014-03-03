@@ -20,10 +20,14 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addPiecesView: () =>
    unless @options.pieces.length is 0
+    $('html').css('background', "url('assets/skulls.png') repeat left top")
+    $('body, html').css('overflow', 'hidden')
     pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: @options.pieces)
     $(@el).append(pieces_view.render().el)
 
   addCategoriesView: () =>
+   if @options.pieces.length is 0
+    $('html').css('background', "url('assets/dark_exa.png') repeat left top")
     categories_view = 
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
