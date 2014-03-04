@@ -5,7 +5,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   initialize: () ->
    @piece = @options.piece.toJSON()
-   unless @piece.matched
+   unless @piece.matched is 'matched'
     $(@el).bind('click', @rotatePieceOnClick)
      .bind('draginit', @dragInit)
      .bind('dragstart', @dragStart)
@@ -27,8 +27,12 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css('top', "#{@piece.y}px")
    if @piece.matched is 'matched'
     $(@el).addClass('matched')
+    $(@el).css('cursor','default')
    else if @piece.matched is 'half-matched'
     $(@el).addClass('half-matched')
+   else
+    $(@el).css('cursor','pointer')
+   @appendMarksIfNeeded()
    return this
 
   rotatePieceOnClick: (event) =>
@@ -51,40 +55,30 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    if $(@el).hasClass('half-matched') is true && 
       response.current_deviation is 360   
     ### Unbind all handlers to freeze the piece ###
-    $(@el).unbind('click')
-     .unbind('draginit')
-     .unbind('dragstart')
-     .unbind('drag')
-     .unbind('dragend')
+    @unbindAllHandlers(@el)
 
-    @lower_mark_view.remove()
-    @upper_mark_view.remove()
+    @removeMarks()
 
     ### Modify piece's property accordingly and add the 'matched' class ###
-    $(@el).removeClass('half-matched')
-    $(@el).addClass('matched')
-    $(@el).css('cursor', 'default')
+    @changePieceProperties(@el)
 
     ### Save matched property to back-end ###
-    session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
-    session.save(session, { silent: true, wait: true })
-    
+    @saveMatchToBackend(@el)
+
     ### Verify if puzzle is solved and render the cover view if appropriate ###
-    console.log $('.matched').length
     if $('.matched').length is @options.pieces.length
      console.log 'matched all'
-     cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
-     $('body').append(cover_view.render().el)
+     @appendCover()
 
   get_error: (model, response) =>
    console.log response
 
+  
   dragInit: (event, dragdrop) =>
 
   dragStart: (event, dragdrop) =>
-   if @lower_mark_view && @upper_mark_view 
-    @lower_mark_view.remove()
-    @upper_mark_view.remove()  
+   @removeMarks() if @lower_mark_view && @upper_mark_view 
+
    $(@el).css('cursor', 'move')
    false if !$(dragdrop.target).is('.handle')
    $(@el).css('opacity', .5).clone().insertAfter(@el)
@@ -112,9 +106,9 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    $(dragdrop.proxy).remove()
 
    ### Initialize containers ###
-   matched_cells_container = new Array
-   matched_cell_pieces_container = new Array
-   matched_pieces_container = new Array
+   matched_cells_container = []
+   matched_cell_pieces_container = []
+   matched_pieces_container = []
 
    ### Get auxiliary data for restricting 'drag-and-drop' zone ###
    w_percentage = 3*$(window).width()/100
@@ -150,7 +144,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
       matched_cell_pieces_container.push('overlapped')
    )
 
-   ### GET END-POINT FOR THE TARGET PIECE: ###
+   ### GET END-POINT FOR THE TARGET PIECE: REVIEW!!!### 
    end_point =
     if matched_cells_container.length is 0
      $(".cell").css('background-color', 'rgba(255,255,255,0.0')
@@ -185,63 +179,100 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    if matched_cells_container.length is 1 && 
       $(dragdrop.target).attr('alt') is matched_cells_container[0].id && 
       $(dragdrop.target).attr('style').match(/\(360deg\)/)
-    $(@el).unbind('click')
-     .unbind('draginit')
-     .unbind('dragstart')
-     .unbind('drag')
-     .unbind('dragend')
 
-    @lower_mark_view.remove()
-    @upper_mark_view.remove()
-    
-    $(@el).addClass('matched')
-    $(@el).css('cursor', 'default')
-    
-    session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'matched')
-    session.save(session, { silent: true, wait: true })
-    
+    @unbindAllHandlers(@el)
+
+    @removeMarks()
+
+    @changePieceProperties(@el)
+
+    @saveMatchToBackend(@el)
+
     console.log $('.matched').length
     if $('.matched').length is @options.pieces.length
      console.log 'all matched'
-     cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
-     $('body').append(cover_view.render().el)
-   
+     @appendCover()
+
    else if matched_cells_container.length is 1 && 
            $(dragdrop.target).attr('alt') is matched_cells_container[0].id
+
+    @appendMarks(end_point.top_y, end_point.left_x, $(@el).width())
+
     $(dragdrop.target).addClass('half-matched')
-
-    @upper_mark_view = 
-     new Puzzle.Views.Addons.UpperMark(
-      piece_top: end_point.top_y, 
-      piece_bottom: end_point.left_x,
-      pieces_width: $(@el).width()
-     )
-    @lower_mark_view =
-     new Puzzle.Views.Addons.LowerMark(
-      piece_top: end_point.top_y, 
-      piece_bottom: end_point.left_x,
-      pieces_width: $(@el).width()
-     )
-
-    $('body').append(@lower_mark_view.render().el)
-    $('body').append(@upper_mark_view.render().el)
-
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'half-matched')
     session.save(session, { silent: true, wait: true })
 
    else if matched_cells_container.length is 1
-    @upper_mark_view = 
-     new Puzzle.Views.Addons.UpperMark(
-      piece_top: end_point.top_y, 
-      piece_bottom: end_point.left_x,
-      pieces_width: $(@el).width()
-     )
-    @lower_mark_view =
-     new Puzzle.Views.Addons.LowerMark(
-      piece_top: end_point.top_y, 
-      piece_bottom: end_point.left_x,
-      pieces_width: $(@el).width()
-     )
+    @appendMarks(end_point.top_y, end_point.left_x, $(@el).width())
 
-    $('body').append(@lower_mark_view.render().el)
-    $('body').append(@upper_mark_view.render().el)
+   else if matched_cells_container.length is 0
+    if $(@el).hasClass('half-matched') 
+     $(@el).removeClass('half-matched')
+     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'n_a')
+     session.save(session, { silent: true, wait: true })
+
+
+  unbindAllHandlers: (obj) =>
+   $(obj).unbind('click')
+    .unbind('draginit')
+    .unbind('dragstart')
+    .unbind('drag')
+    .unbind('dragend')
+
+  appendMarks: (top, left, pieces_width) =>
+   @upper_mark_view = 
+    new Puzzle.Views.Addons.UpperMark(
+     piece_top: top,
+     piece_bottom: left,
+     pieces_width: pieces_width,
+     pieces_id: @piece.id
+    )
+   @lower_mark_view =
+    new Puzzle.Views.Addons.LowerMark(
+     piece_top: top,
+     piece_bottom: left,
+     pieces_width: pieces_width,
+     pieces_id: @piece.id
+    )
+
+   $('body').append(@lower_mark_view.render().el)
+   $('body').append(@upper_mark_view.render().el)
+
+   session = 
+    new Puzzle.Models.Session(
+     id: $(@el).attr('id'), 
+     marked: 'marked', 
+     top: top, left: left)
+   session.save(session, { silent: true, wait: true })
+
+  appendMarksIfNeeded: () =>
+   if @piece.marked is 'marked' && 
+      $("#u_#{@piece.id}").length is 0 && 
+      $("#l_#{@piece.id}").length is 0
+    @appendMarks(@piece.top, @piece.left, $(@el).width())
+
+  removeMarks: () ->
+   @lower_mark_view.remove()
+   @upper_mark_view.remove()
+
+   session = 
+    new Puzzle.Models.Session(
+     id: $(@el).attr('id'), 
+     marked: 'unmarked', 
+     top: '', left: ''
+    )
+   session.save(session, { silent: true, wait: true })
+
+  appendCover: () =>
+   cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
+   $(cover_view.render().el).insertAfter('#board')
+   ###$('body').append(cover_view.render().el)###
+
+  saveMatchToBackend: (obj) =>
+   session = new Puzzle.Models.Session(id: $(obj).attr('id'), matched: 'matched')
+   session.save(session, { silent: true, wait: true })
+
+  changePieceProperties: (obj) =>
+   $(obj).addClass('matched')
+   $(obj).css('cursor', 'default')
+   $(obj).removeClass('half-matched')

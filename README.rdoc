@@ -63,18 +63,4 @@ SATERDAY:
 
  3. Fix bug with the cover not overlapping the pieces
  6. background bug fixing
-
-         $('body').append('<div class= mark-right-top ></div>')
-    $('body').append('<div class= mark-left-bottom ></div>')
-
-    actual_mark_offset_y = end_point.top_y + $(@el).height() - 14 
-    
-    $('.mark-left-bottom').css('position','absolute')
-     .css('left',"#{end_point.left_x}px")
-     .css('top',"#{actual_mark_offset_y}px")
-     .css('z-index', '20')    
-
-    $('.mark-right-top').css('position','absolute')
-     .css('left',"#{actual_mark_offset_x}px")
-     .css('top',"#{end_point.top_y}px")
-     .css('z-index', '20')
+ - there should be a button in order to get back to the gallery?

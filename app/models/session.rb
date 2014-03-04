@@ -37,11 +37,19 @@ class Session
     end
 
     def update_offset session, id, offset
-      $redis.hmset("#{session}.pieces.#{id}", :x, offset[:x], :y, offset[:y])       
+      $redis.hmset("#{session}.pieces.#{id}", 
+                   :x, offset[:x], 
+                   :y, offset[:y])       
     end
 
-    def update_match session, id
-      $redis.hset("#{session}.pieces.#{id}", :matched, 'matched')      
+    def update_match session, id, match_info
+      $redis.hset("#{session}.pieces.#{id}", :matched, match_info)      
+    end
+
+    def update_marks session, id, mark_info, top, left
+      $redis.hmset("#{session}.pieces.#{id}", 
+                   :marked, mark_info, 
+                   :top, top, :left, left)      
     end
 
     def destroy_record session

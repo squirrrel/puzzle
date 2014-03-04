@@ -12,7 +12,16 @@ class SessionsController < ApplicationController
 
   def update
     if params[:matched]
-      Session.update_match(session[:session_id], params[:id])
+      Session.update_match(session[:session_id], 
+                           params[:id], 
+                           params[:matched])
+      render json: {}
+    elsif params[:marked] && params[:top] && params[:left]
+      Session.update_marks(session[:session_id], 
+                           params[:id], 
+                           params[:marked],
+                           params[:top],
+                           params[:left])
       render json: {}
     elsif params[:offset] 
       Session.update_offset(session[:session_id], 
