@@ -25,6 +25,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css('position', "absolute")
     .css('left', "#{@piece.x}px")
     .css('top', "#{@piece.y}px")
+    .css('z-index', '10')
    if @piece.matched is 'matched'
     $(@el).addClass('matched')
     $(@el).css('cursor','default')
@@ -68,12 +69,13 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     ### Verify if puzzle is solved and render the cover view if appropriate ###
     if $('.matched').length is @options.pieces.length
      console.log 'matched all'
-     @appendCover()
+     ###@appendCover()###
+     @showGoToGalleryButton()
 
   get_error: (model, response) =>
    console.log response
 
-  
+
   dragInit: (event, dragdrop) =>
 
   dragStart: (event, dragdrop) =>
@@ -191,7 +193,9 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     console.log $('.matched').length
     if $('.matched').length is @options.pieces.length
      console.log 'all matched'
-     @appendCover()
+     ###@appendCover()
+     $("#board").css('z-index', '1000')###
+     @showGoToGalleryButton()
 
    else if matched_cells_container.length is 1 && 
            $(dragdrop.target).attr('alt') is matched_cells_container[0].id
@@ -206,6 +210,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     @appendMarks(end_point.top_y, end_point.left_x, $(@el).width())
 
    else if matched_cells_container.length is 0
+    @removeMarks()
     if $(@el).hasClass('half-matched') 
      $(@el).removeClass('half-matched')
      session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'n_a')
@@ -267,6 +272,11 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
    $(cover_view.render().el).insertAfter('#board')
    ###$('body').append(cover_view.render().el)###
+
+  showGoToGalleryButton: () =>
+   $('#hover_fake').remove()
+   $('#button').css('display', 'inline')
+   $('#button').show()
 
   saveMatchToBackend: (obj) =>
    session = new Puzzle.Models.Session(id: $(obj).attr('id'), matched: 'matched')

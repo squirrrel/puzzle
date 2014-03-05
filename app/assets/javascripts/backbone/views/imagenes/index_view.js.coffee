@@ -11,11 +11,14 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   render: =>
    pieces = @options.pieces.toJSON()
    imagenes = @options.imagenes.toJSON()
-   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) )
+   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) ) 
+   @appendButton()
+   @appendHiddenDiv()
    @addCover()
    @addBoardView()
    @addPiecesView()
    @addCategoriesView()
+   ###@addLowerMarks()###
    return this
 
   addPiecesView: () =>
@@ -28,6 +31,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   addCategoriesView: () =>
    if @options.pieces.length is 0
     $('html').css('background', "url('assets/dark_exa.png') repeat left top")
+    $('body, html').css('overflow', 'auto')
     categories_view = 
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
@@ -50,6 +54,26 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     if matched_pieces.length is @options.pieces.length
      cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
      $(@el).append(cover_view.render().el)
+
+  appendButton: () =>
+   unless @options.pieces.length is 0
+    button_view = new Puzzle.Views.Addons.Button(pieces: @options.pieces, matched: @matched_pieces_number())
+    $(@el).append(button_view.render().el)
+
+  appendHiddenDiv: () =>
+   unless @options.pieces.length is 0 && @matched_pieces_number().length is @options.pieces.length
+    hidden_div_view = new Puzzle.Views.Addons.HiddenDiv(pieces: @options.pieces)
+    $(@el).append(hidden_div_view.render().el)  
+
+  addLowerMarks: () =>
+   marks_view = new Puzzle.Views.Addons.LowerMarks(pieces: @options.pieces)
+   $('body').append(marks_view.render().el)  
+
+  matched_pieces_number: () =>
+   matched_pieces = []
+   _.map(@options.pieces.toJSON(),
+         (piece)-> matched_pieces.push(piece.matched) if piece.matched isnt undefined && piece.matched is 'matched' )
+   matched_pieces
 
   ###drawCanvas: ->
     canvas = document.getElementById('testCanvas')
