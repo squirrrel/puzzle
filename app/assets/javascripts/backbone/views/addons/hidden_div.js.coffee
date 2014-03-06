@@ -11,11 +11,11 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
 
   render: =>
    $(@el).attr('id', 'hover_fake')
-    .css('width','300px')
-    .css('height','220px')
+    .css('width','270px')
+    .css('height','260px')
     .css('position','absolute')
     .css('left','35%')
-    .css('top','90%')
+    .css('top','93%')
     .css('z-index','100')
     .css('cursor','pointer')
     .css('display','inline')
@@ -28,6 +28,7 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
    $('#button').fadeIn()
 
   goToGallery: () =>
-   session = new Puzzle.Models.Session(id: 'id')
-   session.destroy()
+   session = new Puzzle.Models.Session(id: 'id', hidden: 'hidden')
+   session.save(session, { silent: true, wait: true })
+   @options.image_reference.fetch()
    @options.pieces.reset()

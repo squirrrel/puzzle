@@ -4,6 +4,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   template: JST["backbone/templates/imagenes/index"]
 
   initialize: () ->
+   @options.image_reference.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
    @options.pieces.bind('reset', @render)
    @options.categories.bind('reset', @render)
@@ -12,9 +13,9 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    pieces = @options.pieces.toJSON()
    imagenes = @options.imagenes.toJSON()
    $(@el).html(@template(size: 40, rows: 7, columns: 13 ) ) 
+   @appendCurrentPuzzle()   
    @appendButton()
    @appendHiddenDiv()
-   @addCover()
    @addBoardView()
    @addPiecesView()
    @addCategoriesView()
@@ -45,29 +46,41 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     board_view = new Puzzle.Views.Boards.Board(pieces: @options.pieces)
     $(@el).append(board_view.render().el)
 
-  addCover: () =>
-   unless @options.pieces.length is 0
-    matched_pieces = []
-    _.map(@options.pieces.toJSON(),
-          (piece)-> matched_pieces.push(piece.matched) unless piece.matched is undefined )
-    console.log matched_pieces.length
-    if matched_pieces.length is @options.pieces.length
-     cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
-     $(@el).append(cover_view.render().el)
-
   appendButton: () =>
    unless @options.pieces.length is 0
-    button_view = new Puzzle.Views.Addons.Button(pieces: @options.pieces, matched: @matched_pieces_number())
+    button_view = 
+     new Puzzle.Views.Addons.Button(
+      pieces: @options.pieces, 
+      matched: @matched_pieces_number()
+     )
     $(@el).append(button_view.render().el)
 
   appendHiddenDiv: () =>
    unless @options.pieces.length is 0 && @matched_pieces_number().length is @options.pieces.length
-    hidden_div_view = new Puzzle.Views.Addons.HiddenDiv(pieces: @options.pieces)
+    hidden_div_view = 
+     new Puzzle.Views.Addons.HiddenDiv(
+      pieces: @options.pieces,
+      image_reference: @options.image_reference
+     )
     $(@el).append(hidden_div_view.render().el)  
 
   addLowerMarks: () =>
    marks_view = new Puzzle.Views.Addons.LowerMarks(pieces: @options.pieces)
    $('body').append(marks_view.render().el)  
+
+  appendCurrentPuzzle: () =>
+   console.log @options.image_reference.length
+   if @options.image_reference.length isnt 0 && @options.pieces.length is 0
+    image_id = @options.image_reference.first().get('image_id')
+    image = @options.imagenes.where({ id: "#{image_id}" })
+    image_title = image[0].get('title')
+    current_puzzle = 
+     new Puzzle.Views.Addons.CurrentPuzzle(
+      image_title: image_title,
+      pieces: @options.pieces,
+      imagenes: @options.imagenes
+     )
+    $(@el).append(current_puzzle.render().el)
 
   matched_pieces_number: () =>
    matched_pieces = []

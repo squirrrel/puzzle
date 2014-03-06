@@ -1,6 +1,6 @@
 class Session
   class << self
-    def create_record session, pieces
+    def create_puzzle session, pieces
       pieces.each do |piece|
         $redis.hmset("#{session}.pieces.#{piece[:id]}", 
                      :title, piece[:title], 
@@ -11,6 +11,16 @@ class Session
                      :order, piece[:order])
         $redis.sadd("#{session}.ids", piece[:id])
       end
+    end
+
+    def create_image_reference session, image_id
+      p "#{session}.image_reference"
+      $redis.hset("#{session}.image_reference", :image_id, image_id)
+    end
+
+    def get_image_reference session
+      image_id = $redis.hget("#{session}.image_reference", :image_id)
+      [{ image_id: image_id }] if image_id
     end
 
     def get_pieces_for session
@@ -58,6 +68,32 @@ class Session
         $redis.del("#{session}.pieces.#{id}")
       end
       $redis.del("#{session}.ids")
+      #$redis.del("#{session}.image_reference")
+    end
+    # TODO: refactor, for they are pretty similar
+    def hide_current_puzzle session
+      item_ids = $redis.smembers("#{session}.ids")
+      item_ids.each do |id|
+        $redis.rename("#{session}.pieces.#{id}", "hidden.pieces.#{id}")
+      end
+        $redis.rename("#{session}.ids", "hidden.ids")     
+    end
+
+    def show_current_puzzle session
+      item_ids = $redis.smembers("hidden.ids")
+      item_ids.each do |id|
+        $redis.rename("hidden.pieces.#{id}", "#{session}.pieces.#{id}")
+      end
+      $redis.rename("hidden.ids", "#{session}.ids") 
+    end
+
+    def destroy_current_puzzle_if_any
+      item_ids = $redis.smembers("hidden.ids")
+      true unless item_ids
+      item_ids.each do |id|
+        $redis.del("hidden.pieces.#{id}")
+      end
+      $redis.del("hidden.ids")
     end
   end
 end

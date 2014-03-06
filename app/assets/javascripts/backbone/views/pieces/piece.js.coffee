@@ -69,7 +69,6 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     ### Verify if puzzle is solved and render the cover view if appropriate ###
     if $('.matched').length is @options.pieces.length
      console.log 'matched all'
-     ###@appendCover()###
      @showGoToGalleryButton()
 
   get_error: (model, response) =>
@@ -193,8 +192,6 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     console.log $('.matched').length
     if $('.matched').length is @options.pieces.length
      console.log 'all matched'
-     ###@appendCover()
-     $("#board").css('z-index', '1000')###
      @showGoToGalleryButton()
 
    else if matched_cells_container.length is 1 && 
@@ -267,11 +264,6 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      top: '', left: ''
     )
    session.save(session, { silent: true, wait: true })
-
-  appendCover: () =>
-   cover_view = new Puzzle.Views.Addons.Cover(pieces: @options.pieces)
-   $(cover_view.render().el).insertAfter('#board')
-   ###$('body').append(cover_view.render().el)###
 
   showGoToGalleryButton: () =>
    $('#hover_fake').remove()

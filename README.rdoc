@@ -52,16 +52,24 @@ SATERDAY:
  3. Cut all images, save pieces to the db, in the meantime:
   - Complicated image pieces should be bigger, easy one pieces should a bit be smaller
   - Define weather an image is complicates or easy
-  - Define proportion of and image/ or natural width/height to dispalay them properly
+  - Define proportion of and image/ or natural width/height to display them properly
 
  17. Cut all of the images from my collection wisely
  18. Beautify Cover div should have a pseudo-button
- 19. RELASE 1.1 - time should be limitted and there should be a time out to get user more competitive
+ 19. RELASE 1.1 - time should be limited and there should be a time out to get user more competitive
  Some score rating should be present as well...perhaps...
  20. RELEASE 1.2 - user should be able to add some new images to gallery
  21. RELEASE 1.3 - pieces should resemble to puzzle curly pieces no squares anymore
 
- 3. Fix bug with the cover not overlapping the pieces REMOVE THE COVER
- 6. Marks should overlap pieces on reload
+ - Marks should overlap pieces on reload
  - fix hidden_div shifting main board up
- - there should be a button in order to get back to the gallery?
+ - Make images on hove shine + box shadow
+
+ - check the button hide/show workflow
+ - check the hide/show/remove current_session workflow
+ - refactor session.rb
+ - For when the puzzle is solved and the Back to Gallery is clicked:
+  a. we can apply the same workflow as for Back to Gallery when the puzzle is not yet finished
+and delete completely the solved puzzle at the close  button click on the tiny corner img 
+or by choosing/clicking on any other image to start new game
+b. we can reset completely session, deleting as usual with destroy_record + add the deletion of image_reference there 

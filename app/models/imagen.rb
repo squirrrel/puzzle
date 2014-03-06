@@ -7,7 +7,6 @@ include Magick
 #  these same properties should be set below
 #  'imagenes' view should also be changed to emit them
 class Imagen < CouchRest::Model::Base
-
 	property :title,        String
 	property :category,     String
 	property :subcategory,  String,    default: 'none'

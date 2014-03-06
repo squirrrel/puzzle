@@ -32,11 +32,14 @@ class Piece < CouchRest::Model::Base
 
   	def get_all_child_pieces picture_id
   		pieces.rows.map! do |row|
-  			piece = {} 
-  			piece[:title] = row.value[1] 
-        piece[:id] = row.id
-        piece[:order]  = row.key
-  			piece.with_indifferent_access if row.value[0] == picture_id
+  			piece = {}
+        if row.value[0] == picture_id
+  			  piece[:title] = row.value[1]
+          piece[:id] = row.id
+          piece[:order]  = row.key
+        #  piece[:imagen_id] = row.value[0]
+  			  piece.with_indifferent_access 
+        end
       end
   	end
 
