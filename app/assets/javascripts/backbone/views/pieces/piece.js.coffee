@@ -37,7 +37,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    return this
 
   rotatePieceOnClick: (event) =>
-   session = new Puzzle.Models.Session(id: $(@el).attr('id'))
+   session = new Puzzle.Models.Session(id: $(@el).attr('id'), deviated: 'deviated')
 
    session.save(session, { 
     silent: true, 

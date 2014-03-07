@@ -8,44 +8,27 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    Session.destroy_record(session[:session_id])
+    if params[:destroy_hidden]
+      Session.destroy_current_puzzle_if_any(session[:session_id])
+    else
+      Session.destroy_record(session[:session_id])
+    end
+
     render json: []
   end
 
   def update
-    if params[:restore_current]
-      Session.show_current_puzzle(session[:session_id])
-      render json: {}
-
-    elsif params[:hidden]
-      Session.hide_current_puzzle(session[:session_id])
-      render json: {}
-
-    elsif params[:matched]
-      Session.update_match(session[:session_id], 
-                           params[:id], 
-                           params[:matched])
-      render json: {}
-
-    elsif params[:marked] && params[:top] && params[:left]
-      Session.update_marks(session[:session_id], 
-                           params[:id], 
-                           params[:marked],
-                           params[:top],
-                           params[:left])
-      render json: {}
-
-    elsif params[:offset] 
-      Session.update_offset(session[:session_id], 
-                          params[:id], 
-                          params[:offset])
-      render json: {}
-
-    else
-      current_deviation = Session.update_deviation(session[:session_id], 
-                                                 params[:id])
-      render json: { current_deviation: current_deviation, location: 'piece' }
-    end
+    returned_value = Session.update_record(params, session[:session_id])      
+    
+    response = 
+      if params[:deviated]
+        {current_deviation: returned_value, 
+         location: 'piece'}
+      else
+        {}      
+      end
+    
+    render json: response
   end
 
   def create

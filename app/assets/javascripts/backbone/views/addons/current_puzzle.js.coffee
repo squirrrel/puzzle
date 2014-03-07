@@ -4,6 +4,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   tagName: 'div'
 
   initialize: () ->
+   @height = 80
    @options.pieces.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
    $(@el).bind('mouseover', @highlight)
@@ -13,8 +14,8 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   render: =>
    $(@el).attr('id',"current_puzzle")
     .attr('class','imagenes')
-    .css('height','80')
-    .css('width','130')
+    .css('height',"#{@height}px")
+    .css('width','130px')
     .css('cursor', 'pointer')
     .css('position','fixed')
     .css('top', '0%')
@@ -26,6 +27,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
     .css('box-shadow', '0px 0px 12px 5px rgba(255, 255, 255, 0.40)')
     .css('-moz-box-shadow','0px 0px 12px 5px rgba(255, 255, 255, 0.40)')
     .css('-webkit-box-shadow','0px 0px 12px 5px rgba(255, 255, 255, 0.40)')
+   @appendCloseButton()
    return this
 
   highlight: () =>
@@ -33,6 +35,15 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
 
   shadow: () =>
    $(@el).css('opacity', '0.6')
+
+  appendCloseButton: () =>
+   @close_button_view = 
+    new Puzzle.Views.Addons.CloseButton(
+     height: @height, 
+     parent_id: $(@el).attr('id')
+    )
+   $(@el).append($(@close_button_view.render().el))
+
 
   getCurrentPuzzle: () =>
    imagen = new Puzzle.Models.Session(
