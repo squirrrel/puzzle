@@ -10,8 +10,10 @@ class Puzzle.Views.Boards.Board extends Backbone.View
 
   render: =>
    $(@el).attr('id', 'board')
-    .css('position','relative')
-    .css('margin','200px auto')
+    .css('position','fixed')
+    .css('margin-top','220px')
+    .css('margin-left', '30%')
+    .css('margin-right', '30%')
     .css('border-left','none')
     .css('border-bottom','none')
     .css('border-top','1px solid #DBDBDB')

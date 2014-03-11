@@ -8,17 +8,14 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    if params[:destroy_hidden]
-      Session.destroy_current_puzzle_if_any(session[:session_id])
-    else
-      Session.destroy_record(session[:session_id])
-    end
-
+    p $redis.keys('*')
+    Session.destroy_record(session[:session_id])
     render json: []
   end
 
   def update
-    returned_value = Session.update_record(params, session[:session_id])      
+    returned_value = Session.update_record(params, 
+                                           session[:session_id])      
     
     response = 
       if params[:deviated]
@@ -35,7 +32,8 @@ class SessionsController < ApplicationController
     p '--------------------'
     p session[:session_id]
     Session.destroy_current_puzzle_if_any()
-    Session.create_image_reference(session[:session_id], params[:imagen_id])
+    Session.create_image_reference(session[:session_id], 
+                                   params[:imagen_id])
 
     pieces = Piece.get_and_transform_set(params[:imagen_id])
     Session.create_puzzle(session[:session_id], pieces)

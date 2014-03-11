@@ -36,9 +36,16 @@ class Session
       [{ image_id: image_id }] if image_id
     end
 
-    # TODO: refactor, for they are pretty similar
     def destroy_record session
+      destroy_current_puzzle_if_any(session)
+      destroy_session_records_if_any(session)
+    end
+
+    # TODO: refactor, for they are pretty similar
+    def destroy_session_records_if_any session
       item_ids = $redis.smembers("#{session}.ids")
+
+      true unless item_ids
       
       item_ids.each do |id|
         $redis.del("#{session}.pieces.#{id}")

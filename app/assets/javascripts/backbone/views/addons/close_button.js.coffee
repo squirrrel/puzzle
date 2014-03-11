@@ -29,5 +29,5 @@ class Puzzle.Views.Addons.CloseButton extends Backbone.View
   removeParent: () =>
    $("##{@options.parent_id}").remove()
 
-   session = new Puzzle.Models.Session(id: 'id', destroy_hidden: 'destroy_hidden')
+   session = new Puzzle.Models.Session(id: 'id')
    session.destroy()

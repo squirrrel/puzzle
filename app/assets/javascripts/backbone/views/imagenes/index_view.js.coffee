@@ -14,7 +14,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    imagenes = @options.imagenes.toJSON()
    $(@el).html(@template(size: 40, rows: 7, columns: 13 ) ) 
    @appendCurrentPuzzle()   
-   @appendButton()
+   @appendGalleryButton()
    @appendHiddenDiv()
    @addBoardView()
    @addPiecesView()
@@ -46,12 +46,13 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     board_view = new Puzzle.Views.Boards.Board(pieces: @options.pieces)
     $(@el).append(board_view.render().el)
 
-  appendButton: () =>
+  appendGalleryButton: () =>
    unless @options.pieces.length is 0
     button_view = 
-     new Puzzle.Views.Addons.Button(
+     new Puzzle.Views.Addons.GalleryButton(
       pieces: @options.pieces, 
-      matched: @matched_pieces_number()
+      matched: @matched_pieces_number(),
+      image_reference: @options.image_reference
      )
     $(@el).append(button_view.render().el)
 
@@ -69,7 +70,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    $('body').append(marks_view.render().el)  
 
   appendCurrentPuzzle: () =>
-   console.log @options.image_reference.length
+   console.log @options.image_reference
    if @options.image_reference.length isnt 0 && @options.pieces.length is 0
     image_id = @options.image_reference.first().get('image_id')
     image = @options.imagenes.where({ id: "#{image_id}" })
@@ -85,7 +86,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   matched_pieces_number: () =>
    matched_pieces = []
    _.map(@options.pieces.toJSON(),
-         (piece)-> matched_pieces.push(piece.matched) if piece.matched isnt undefined && piece.matched is 'matched' )
+         (piece)-> matched_pieces.push(piece.matched) if piece.matched is 'matched' )
    matched_pieces
 
   ###drawCanvas: ->

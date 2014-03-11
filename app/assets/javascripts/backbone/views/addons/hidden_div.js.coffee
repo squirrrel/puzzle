@@ -16,9 +16,9 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
     .css('position','absolute')
     .css('left','35%')
     .css('top','93%')
-    .css('z-index','100')
     .css('cursor','pointer')
     .css('display','inline')
+    .css('z-index','100')
    return this
 
   hideButton: () =>

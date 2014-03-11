@@ -61,15 +61,6 @@ SATERDAY:
  20. RELEASE 1.2 - user should be able to add some new images to gallery
  21. RELEASE 1.3 - pieces should resemble to puzzle curly pieces no squares anymore
 
- - Marks should overlap pieces on reload
- - fix hidden_div shifting main board up
- - there is a bug of matched pieces loosing their property on going back to current puzzle
- - there is a bug when going back to the gallery there is an extra scroll and image layout is altered
-  
-
- - check the button hide/show workflow
- - check the hide/show/remove current_session workflow
-
  - For when the puzzle is solved and the Back to Gallery is clicked:
   a. we can apply the same workflow as for Back to Gallery when the puzzle is not yet finished
 and delete completely the solved puzzle at the close  button click on the tiny corner img 
@@ -77,3 +68,9 @@ or by choosing/clicking on any other image to start new game
 b. we can reset completely session, deleting as usual with destroy_record + add the deletion of image_reference there
 
  - Either improve slow performance or show a progress bar whenever images or pieces are loaded 
+
+ - Refactor session controller and hide method calls in session model, encapsulate some
+
+    #$redis.flushdb
+    #p '-----------------'
+    #p $redis.keys('*')

@@ -1,6 +1,6 @@
 Puzzle.Views.Addons ||= {}
 
-class Puzzle.Views.Addons.Button extends Backbone.View
+class Puzzle.Views.Addons.GalleryButton extends Backbone.View
   tagName: 'div'
 
   initialize: () -> 
@@ -11,7 +11,7 @@ class Puzzle.Views.Addons.Button extends Backbone.View
    if @options.pieces.length is @options.matched.length
     $(@el).css('display', 'inline')
    else
-     $(@el).css('display', 'none')
+    $(@el).css('display', 'none')
    $(@el).attr('id', 'button')
    $(@el).css('width', '160px')
    $(@el).css('height', '40px')
@@ -41,4 +41,5 @@ class Puzzle.Views.Addons.Button extends Backbone.View
   goToGallery: () =>
    session = new Puzzle.Models.Session(id: 'id')
    session.destroy()
+   @options.image_reference.fetch()
    @options.pieces.reset()

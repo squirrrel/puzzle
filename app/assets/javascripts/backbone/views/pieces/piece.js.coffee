@@ -33,7 +33,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     $(@el).addClass('half-matched')
    else
     $(@el).css('cursor','pointer')
-   @appendMarksIfNeeded()
+    ### @appendMarksIfNeeded() ###
    return this
 
   rotatePieceOnClick: (event) =>
@@ -58,7 +58,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     ### Unbind all handlers to freeze the piece ###
     @unbindAllHandlers(@el)
 
-    @removeMarks()
+    ### @removeMarks() ###
 
     ### Modify piece's property accordingly and add the 'matched' class ###
     @changePieceProperties(@el)
@@ -67,7 +67,8 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     @saveMatchToBackend(@el)
 
     ### Verify if puzzle is solved and render the cover view if appropriate ###
-    if $('.matched').length is @options.pieces.length
+    console.log $('.matched').length
+    if $('.matched').length is @options.pieces.length 
      console.log 'matched all'
      @showGoToGalleryButton()
 
@@ -78,7 +79,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
   dragInit: (event, dragdrop) =>
 
   dragStart: (event, dragdrop) =>
-   @removeMarks() if @lower_mark_view && @upper_mark_view 
+   ### @removeMarks() if @lower_mark_view && @upper_mark_view ###
 
    $(@el).css('cursor', 'move')
    false if !$(dragdrop.target).is('.handle')
@@ -180,10 +181,10 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    if matched_cells_container.length is 1 && 
       $(dragdrop.target).attr('alt') is matched_cells_container[0].id && 
       $(dragdrop.target).attr('style').match(/\(360deg\)/)
-
+    console.log 'Done'
     @unbindAllHandlers(@el)
 
-    @removeMarks()
+    ### @removeMarks() ###
 
     @changePieceProperties(@el)
 
@@ -197,17 +198,17 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    else if matched_cells_container.length is 1 && 
            $(dragdrop.target).attr('alt') is matched_cells_container[0].id
 
-    @appendMarks(end_point.top_y, end_point.left_x, $(@el).width())
+    ### @appendMarks(end_point.top_y, end_point.left_x, $(@el).width()) ###
 
     $(dragdrop.target).addClass('half-matched')
     session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'half-matched')
     session.save(session, { silent: true, wait: true })
 
    else if matched_cells_container.length is 1
-    @appendMarks(end_point.top_y, end_point.left_x, $(@el).width())
+    ### @appendMarks(end_point.top_y, end_point.left_x, $(@el).width()) ###
 
    else if matched_cells_container.length is 0
-    @removeMarks()
+    ### @removeMarks() ###
     if $(@el).hasClass('half-matched') 
      $(@el).removeClass('half-matched')
      session = new Puzzle.Models.Session(id: $(@el).attr('id'), matched: 'n_a')
@@ -267,8 +268,8 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   showGoToGalleryButton: () =>
    $('#hover_fake').remove()
-   $('#button').css('display', 'inline')
-   $('#button').show()
+   $('#button').delay(2000).css('display', 'inline')
+   $('#button').delay(2000).show()
 
   saveMatchToBackend: (obj) =>
    session = new Puzzle.Models.Session(id: $(obj).attr('id'), matched: 'matched')
@@ -276,5 +277,6 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   changePieceProperties: (obj) =>
    $(obj).addClass('matched')
+   ###$('.piece-of-puzzle').addClass('matched')###
    $(obj).css('cursor', 'default')
    $(obj).removeClass('half-matched')
