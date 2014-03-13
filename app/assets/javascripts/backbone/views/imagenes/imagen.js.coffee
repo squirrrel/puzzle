@@ -6,6 +6,12 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
   initialize: () ->
    @options.imagen.bind('reset', @render)
    @options.pieces.bind('reset', @render)
+   if @options.imagen.get('title') is 'avatar_9.jpg'
+    height = @options.imagen.get('height')
+    width = @options.imagen.get('width')
+    @height = @getActualImageHeight(height, width)
+   else
+    @height = '200'
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
    $(@el).bind('mouseout', @shadowImages)
@@ -14,7 +20,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
     .attr('id',"#{@options.imagen.toJSON().id}")
     .attr('class','imagenes')
-    .css('height','200')
+    .css('height',"#{@height}")
     .css('width','400')
     .css('cursor', 'pointer')
     .css('margin', '14px 14px 14px')
@@ -47,4 +53,9 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).css('opacity','0.8')
     .css('box-shadow', '')
     .css('-moz-box-shadow','')
-    .css('-webkit-box-shadow','') 
+    .css('-webkit-box-shadow','')
+
+  getActualImageHeight: (height, width) =>
+    percentage = 400*100/Number(width)
+
+    Number(height)*percentage/100

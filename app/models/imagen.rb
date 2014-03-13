@@ -7,6 +7,8 @@ include Magick
 #  these same properties should be set below
 #  'imagenes' view should also be changed to emit them
 class Imagen < CouchRest::Model::Base
+	property :width,        String
+	property :height,       String
 	property :title,        String
 	property :category,     String
 	property :subcategory,  String,    default: 'none'
@@ -21,18 +23,21 @@ class Imagen < CouchRest::Model::Base
 			map:
 				"function(doc) {
 					if(doc['type'] == 'Imagen' && doc.title && doc.category && doc.subcategory) {
-						emit(doc.title, [doc.category, doc.subcategory]);
+						emit(doc.title, [doc.category, doc.subcategory, doc.width, doc.height]);
 					}
 				}"
 	end
 
   class << self
+
 		def get_all
 			imagenes.rows.map! do |row|
 				imagen = {}
 				imagen[:id] = row.id
 				imagen[:title] = row.key
 				imagen[:category] = row.value[0]
+				imagen[:width] = row.value[2]
+				imagen[:height] = row.value[3]
 				imagen[:subcategory] = row.value[1] unless row.value[1] == 'none' 
 
 				imagen
@@ -44,9 +49,8 @@ class Imagen < CouchRest::Model::Base
 		 	categories = by_category.reduce.group_level(1).rows
 			categories.map!{ |category| { category: category['key'] } }			
 		end
-	end
 
-	private
+	#	private
 	# EXPLAIN: The method iterates through hashes, and based on their key-value pairs,
 	#  creates corresponding Imagen objects in the DB
 	# def self.create_imagenes
@@ -288,4 +292,63 @@ class Imagen < CouchRest::Model::Base
 	# 	end
 	# 	pieces_collection
 	# end
+		def crop_image
+			piece_size = 50
+			Dir.chdir("/home/ninok/projects/puzzle/app/assets/images/")
+			image = ImageList.new("avatar_9.jpg")
+
+			# Get number of pieces per width and per height
+			columns_quantity = image.columns/piece_size
+			rows_quantity = image.rows/piece_size
+
+
+			# Calculate even width and size of picture
+			actual_width = piece_size*columns_quantity
+			actual_height = piece_size*rows_quantity
+
+			# Save image size to the db
+			Imagen.get('6cd874de2ea6aca248e693dcbb1a9df9')
+			 .update_attributes(width: actual_width,
+			                    height: actual_height)
+
+			# Resize picture according to the previous calculation
+			image = image.resize_to_fill(actual_width, actual_height).write('avatar_9.jpg')
+
+
+			# Determine step intervals
+			y_steps = []
+			(0...rows_quantity).each do |number|
+			  number == 0 ? (y_steps << number) : (y_steps << y_steps.last + 50)
+			end
+
+			p y_steps
+			p columns_quantity
+			p rows_quantity
+			@order = 1
+			
+			# Cut wisely
+			y_steps.each do |y_step|
+			  iteration = 0
+			  x_step = 0
+
+			  until iteration == columns_quantity
+			  	file_name = "avatar_9_#{y_step}_#{iteration}.jpg"
+			    
+			    cropped_image = image.crop(x_step, y_step, piece_size, piece_size, true)
+			    cropped_image.write(file_name)
+			    # The database part
+			    Piece.create!(
+	          title: file_name, 
+	          imagen_id: '6cd874de2ea6aca248e693dcbb1a9df9', 
+	          deviation: 0,
+	          order: @order
+          )
+
+			    x_step = x_step + 50
+			    iteration = iteration + 1
+			  	@order = @order + 1
+			  end
+			end
+		end
+	end
 end

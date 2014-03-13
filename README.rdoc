@@ -71,6 +71,21 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - Refactor session controller and hide method calls in session model, encapsulate some
 
+ - Background job for this one:
     #$redis.flushdb
     #p '-----------------'
     #p $redis.keys('*')
+
+ - Separately write method that will assign width and height for every single image in the db. Run it
+ - After its completion refactor image.js.coffee and current_puzzle.js.coffee
+
+ - Make each piece bigger than 50?, also depending on image size/complexity piece could be of two different sizes, bigger ones and smaller ones.
+ 
+ - Essentially, we could either leave the natural image size/ crop it, and resize pieces to minify on frontend. OR We could resize it to minify on backend, its real size will be minified, crop it and represent pieces on their natural size on frontend.
+
+ Smaller picture means less memory consuming and faster browser uploading process.
+ NOTE: when it comes to gallery, images should be minified on frontend too, to fit the gallery proportions anyways, so not to count gallery when choosing one of the above workflows. 
+
+ - Make board be formed of a correct number of cells, not 7*13, but the correct one
+
+ - Highlight piece when it is matched using opacity?

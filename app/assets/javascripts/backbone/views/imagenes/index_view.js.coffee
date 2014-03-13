@@ -89,6 +89,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
          (piece)-> matched_pieces.push(piece.matched) if piece.matched is 'matched' )
    matched_pieces
 
+
   ###drawCanvas: ->
     canvas = document.getElementById('testCanvas')
     ctx = canvas.getContext('2d')
