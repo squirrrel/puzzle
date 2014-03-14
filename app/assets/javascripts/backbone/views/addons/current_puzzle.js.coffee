@@ -4,9 +4,14 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   tagName: 'div'
 
   initialize: () ->
-   @height = 80
    @options.pieces.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
+
+   image_height = @options.imagen.get('height')
+   image_width = @options.imagen.get('width')
+   @cp_height = @getActualImageHeight(image_height, image_width)
+   @cp_width = 130
+
    $(@el).bind('mouseover', @highlight)
     .bind('mouseout', @shadow)
     .bind('click', @getCurrentPuzzle)
@@ -14,13 +19,13 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   render: =>
    $(@el).attr('id',"current_puzzle")
     .attr('class','imagenes')
-    .css('height',"#{@height}px")
-    .css('width','130px')
+    .css('height',"#{@cp_height}px")
+    .css('width',"#{@cp_width}px")
     .css('cursor', 'pointer')
     .css('position','fixed')
     .css('top', '0%')
     .css('right', '1.5%')
-    .css('background', "url('assets/#{@options.image_title}')")
+    .css('background', "url('assets/#{@options.imagen.get("title")}')")
     .css('background-size', '100% 100%')
     .css('opacity', '0.6')
     .css('z-index', '1000')
@@ -39,7 +44,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   appendCloseButton: () =>
    @close_button_view = 
     new Puzzle.Views.Addons.CloseButton(
-     height: @height, 
+     height: @cp_height, 
      parent_id: $(@el).attr('id')
     )
    $(@el).append($(@close_button_view.render().el))
@@ -60,3 +65,8 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
   display_puzzle: (model, response) =>
    ###@options.imagenes.reset()###   
    @options.pieces.fetch()
+
+  getActualImageHeight: (height, width) =>
+   percentage = @cp_width*100/Number(width)
+
+   Number(height)*percentage/100

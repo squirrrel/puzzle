@@ -6,12 +6,12 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
   initialize: () ->
    @options.imagen.bind('reset', @render)
    @options.pieces.bind('reset', @render)
-   if @options.imagen.get('title') is 'avatar_9.jpg'
-    height = @options.imagen.get('height')
-    width = @options.imagen.get('width')
-    @height = @getActualImageHeight(height, width)
-   else
-    @height = '200'
+
+   image_height = @options.imagen.get('height')
+   image_width = @options.imagen.get('width')
+   @gi_height = @getActualImageHeight(image_height, image_width)
+   @gi_width = 400
+
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
    $(@el).bind('mouseout', @shadowImages)
@@ -20,8 +20,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
     .attr('id',"#{@options.imagen.toJSON().id}")
     .attr('class','imagenes')
-    .css('height',"#{@height}")
-    .css('width','400')
+    .css('height',"#{@gi_height}")
+    .css('width', @gi_width)
     .css('cursor', 'pointer')
     .css('margin', '14px 14px 14px')
     .css('opacity', '0.8')
@@ -56,6 +56,6 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     .css('-webkit-box-shadow','')
 
   getActualImageHeight: (height, width) =>
-    percentage = 400*100/Number(width)
+   percentage = @gi_width*100/Number(width)
 
-    Number(height)*percentage/100
+   Number(height)*percentage/100

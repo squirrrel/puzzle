@@ -12,8 +12,8 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   render: =>
    pieces = @options.pieces.toJSON()
    imagenes = @options.imagenes.toJSON()
-   $(@el).html(@template(size: 40, rows: 7, columns: 13 ) ) 
-   @appendCurrentPuzzle()   
+   $(@el).html(@template())
+   @appendCurrentPuzzle()
    @appendGalleryButton()
    @appendHiddenDiv()
    @addBoardView()
@@ -73,11 +73,10 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    console.log @options.image_reference
    if @options.image_reference.length isnt 0 && @options.pieces.length is 0
     image_id = @options.image_reference.first().get('image_id')
-    image = @options.imagenes.where({ id: "#{image_id}" })
-    image_title = image[0].get('title')
+    imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
     current_puzzle = 
      new Puzzle.Views.Addons.CurrentPuzzle(
-      image_title: image_title,
+      imagen: imagen,
       pieces: @options.pieces,
       imagenes: @options.imagenes
      )
