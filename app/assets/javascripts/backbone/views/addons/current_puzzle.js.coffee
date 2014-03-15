@@ -9,8 +9,8 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
 
    image_height = @options.imagen.get('height')
    image_width = @options.imagen.get('width')
-   @cp_height = @getActualImageHeight(image_height, image_width)
    @cp_width = 130
+   @cp_height = @getActualImageHeight(image_height, image_width)
 
    $(@el).bind('mouseover', @highlight)
     .bind('mouseout', @shadow)

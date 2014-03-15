@@ -9,8 +9,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
 
    image_height = @options.imagen.get('height')
    image_width = @options.imagen.get('width')
-   @gi_height = @getActualImageHeight(image_height, image_width)
    @gi_width = 400
+   @gi_height = @getActualImageHeight(image_height, image_width)
 
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
