@@ -7,10 +7,10 @@ class Puzzle.Views.Addons.CloseButton extends Backbone.View
    $(@el).bind('click', @removeParent)
 
   render: =>
-   width = 15
+   size = 15
    $(@el).attr('id','close_button')
-   $(@el).css('width', "#{width}px")
-    .css('height', "#{width}px")
+   $(@el).css('size', "#{size}px")
+    .css('height', "#{size}px")
     .css('background-color','rgba(255,255,255,0.8)')
     .text('✘')
     .css('text-align','center')
@@ -21,13 +21,13 @@ class Puzzle.Views.Addons.CloseButton extends Backbone.View
     .css('font-weight','normal')
     .css('position','absolute')
     .css('top',"#{@options.height + 2}px")
-    .css('left', "-#{width + 2}px")
+    .css('left', "-#{size + 2}px")
     .css('z-index','3000')
     .css('border-radius','50%')
    return this
 
   removeParent: () =>
-   $("##{@options.parent_id}").remove()
+   $("##{@options.parent_id}, #close_button").remove()
 
    session = new Puzzle.Models.Session(id: 'id')
    session.destroy()

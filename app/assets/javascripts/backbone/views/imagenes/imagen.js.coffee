@@ -9,8 +9,12 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
 
    image_height = @options.imagen.get('height')
    image_width = @options.imagen.get('width')
-   @gi_width = 400
-   @gi_height = @getActualImageHeight(image_height, image_width)
+   if Number(image_height) < Number(image_width)
+    @gi_width = 400
+    @gi_height = @getActualImageHeight(image_height, image_width)
+   else
+    @gi_height = 290
+    @gi_width = @getActualImageWidth(image_height, image_width)
 
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
@@ -20,7 +24,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
     .attr('id',"#{@options.imagen.toJSON().id}")
     .attr('class','imagenes')
-    .css('height',"#{@gi_height}")
+    .css('height', @gi_height)
     .css('width', @gi_width)
     .css('cursor', 'pointer')
     .css('margin', '14px 14px 14px')
@@ -36,9 +40,14 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     success: @display_puzzle, 
     error: @display_error 
    })
+   $('#categories').fadeOut()
 
   display_puzzle: (model, response) =>
+   @options.imagenes.reset()
    @options.pieces.fetch()
+   $('body').css('background', "url('assets/skulls.png') repeat left top")
+   $('body, html').css('overflow', 'hidden')
+   $('body').attr('id', "#{@options.imagen.get('columns')}") 
 
   display_error: (model, response) =>
    console.log response
@@ -59,3 +68,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    percentage = @gi_width*100/Number(width)
 
    Number(height)*percentage/100
+
+  getActualImageWidth: (height, width) =>
+   percentage = @gi_height*100/Number(height)
+
+   Number(width)*percentage/100

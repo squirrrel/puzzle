@@ -17,7 +17,8 @@ class Puzzle.Views.Cells.Cells extends Backbone.View
   addOne: (id) =>
    cell_view = 
     new Puzzle.Views.Cells.Cell(
-     pieces: @options.pieces, 
+     pieces: @options.pieces,
+     piece_size: @options.piece_size, 
      id: id
     )
    $(@el).append(cell_view.render().el)

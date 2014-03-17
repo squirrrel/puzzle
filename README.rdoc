@@ -81,17 +81,14 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
 
 
- - Highlight piece when it is matched using opacity?
 
- - Make pieces size, cells size be defined in one place and variable shared
 
- - Make pieces preload before displaying the puzzle view to make them appear all at ones not one after another
+ - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
 
- - Resize those gallery images which height is greater than their width
+ - edit offsets not to overlap the board, place board adequately according to the actual image proportion
 
  - couch_seed should parse some json/yml file instead to load those values
 
  - the app load is very slowwwww
 
  - something is wrong with the board, it should fit cells correctly, number of cells per width = image.columns
- number of cells per height = image.row 

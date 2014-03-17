@@ -9,6 +9,7 @@ class Puzzle.Views.Addons.Categories extends Backbone.View
 
   render: =>
    $(@el).text('Gallery')
+   $(@el).attr('id','categories')
    $(@el).css('color','rgba(255,255,255,0.7)')
     .css('font-size', '40px')
     .css('font-family',"'Oregano', cursive")

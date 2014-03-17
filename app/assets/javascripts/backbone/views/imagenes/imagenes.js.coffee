@@ -16,7 +16,8 @@ class Puzzle.Views.Imagenes.Imagenes extends Backbone.View
   addOne: (imagen) =>
    imagen_view = new Puzzle.Views.Imagenes.Imagen(
     category: @options.category,
-    imagen: imagen, 
+    imagen: imagen,
+    imagenes: @options.imagenes,
     pieces: @options.pieces
    )
    $(@el).append(imagen_view.render().el)

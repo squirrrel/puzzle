@@ -17,8 +17,8 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .attr('class', 'piece-of-puzzle')
     .attr('alt',"#{@piece.order}")
     .attr('src', "/assets/#{@piece.title}")
-    .attr('height', '40')
-    .attr('width', '40')
+    .attr('height', @piece.size)
+    .attr('width', @piece.size)
     .css('transform', "rotate(#{@piece.deviation}deg)")
     .css('-webkit-transform', "rotate(#{@piece.deviation}deg)")
     .css('-moz-transform', "rotate(#{@piece.deviation}deg)")
@@ -26,14 +26,13 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     .css('left', "#{@piece.x}px")
     .css('top', "#{@piece.y}px")
     .css('z-index', '10')
+    .css('cursor', 'pointer')
    if @piece.matched is 'matched'
     $(@el).addClass('matched')
     $(@el).css('cursor','default')
+     .css('opacity', '1.5')
    else if @piece.matched is 'half-matched'
     $(@el).addClass('half-matched')
-   else
-    $(@el).css('cursor','pointer')
-    ### @appendMarksIfNeeded() ###
    return this
 
   rotatePieceOnClick: (event) =>
@@ -61,7 +60,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     ### @removeMarks() ###
 
     ### Modify piece's property accordingly and add the 'matched' class ###
-    @changePieceProperties(@el)
+    @changePieceProperties()
 
     ### Save matched property to back-end ###
     @saveMatchToBackend(@el)
@@ -186,7 +185,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
     ### @removeMarks() ###
 
-    @changePieceProperties(@el)
+    @changePieceProperties()
 
     @saveMatchToBackend(@el)
 
@@ -275,8 +274,8 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    session = new Puzzle.Models.Session(id: $(obj).attr('id'), matched: 'matched')
    session.save(session, { silent: true, wait: true })
 
-  changePieceProperties: (obj) =>
-   $(obj).addClass('matched')
+  changePieceProperties: () =>
+   $(@el).addClass('matched')
    ###$('.piece-of-puzzle').addClass('matched')###
-   $(obj).css('cursor', 'default')
-   $(obj).removeClass('half-matched')
+   $(@el).css('cursor', 'default')
+   $(@el).removeClass('half-matched')

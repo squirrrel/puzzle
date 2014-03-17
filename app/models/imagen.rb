@@ -22,6 +22,7 @@ class Imagen < CouchRest::Model::Base
 
   property :width,        String
   property :height,       String
+  property :columns,      String
   property :title,        String
   property :category,     String
   property :subcategory,  String,    default: 'none'
@@ -47,12 +48,13 @@ class Imagen < CouchRest::Model::Base
       imagenes.rows.map! do |row|
         imagen = {}
         val = row.value.with_indifferent_access
-        
+
         imagen[:id] = row.id
         imagen[:title] = row.key
         imagen[:category] = val[:category]
         imagen[:width] = val[:width]
         imagen[:height] = val[:height]
+        imagen[:columns] = val[:columns]
         imagen[:subcategory] = val[:subcategory] unless val[:subcategory] == 'none' 
 
         imagen
@@ -91,6 +93,13 @@ class Imagen < CouchRest::Model::Base
         Imagen.get(id)
          .update_attributes(width: image_file.columns,
                             height: image_file.rows)        
+      end
+    end
+
+    def insert_column
+      get_all().each do |img|
+        columns = img[:width].to_i/50
+        get(img[:id]).update_attributes(columns: columns)
       end
     end
 

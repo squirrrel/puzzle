@@ -10,9 +10,8 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    @options.categories.bind('reset', @render)
 
   render: =>
-   pieces = @options.pieces.toJSON()
-   imagenes = @options.imagenes.toJSON()
    $(@el).html(@template())
+   @decideOnBackground()
    @appendCurrentPuzzle()
    @appendGalleryButton()
    @appendHiddenDiv()
@@ -24,15 +23,19 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addPiecesView: () =>
    unless @options.pieces.length is 0
-    $('html').css('background', "url('assets/skulls.png') repeat left top")
-    $('body, html').css('overflow', 'hidden')
     pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: @options.pieces)
     $(@el).append(pieces_view.render().el)
 
+  decideOnBackground: () ->
+   if @options.pieces.length is 0
+    $('body').css('background', "url('assets/dark_exa.png') repeat left top")
+    $('body, html').css('overflow', 'auto')
+   else 
+    $('body').css('background', "url('assets/skulls.png') repeat left top")
+    $('body, html').css('overflow', 'hidden')
+
   addCategoriesView: () =>
    if @options.pieces.length is 0
-    $('html').css('background', "url('assets/dark_exa.png') repeat left top")
-    $('body, html').css('overflow', 'auto')
     categories_view = 
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
@@ -57,7 +60,8 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     $(@el).append(button_view.render().el)
 
   appendHiddenDiv: () =>
-   unless @options.pieces.length is 0 && @matched_pieces_number().length is @options.pieces.length
+   unless @options.pieces.length is 0 && 
+          @matched_pieces_number().length is @options.pieces.length
     hidden_div_view = 
      new Puzzle.Views.Addons.HiddenDiv(
       pieces: @options.pieces,

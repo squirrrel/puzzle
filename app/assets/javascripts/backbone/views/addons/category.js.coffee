@@ -10,13 +10,16 @@ class Puzzle.Views.Addons.Category extends Backbone.View
    @options.pieces.bind('reset', @render)
 
   render: =>
-   $(@el).attr('id', "#{@category}")
+   $(@el).attr('id', @category)
+   $(@el).attr('class', 'categories')
     .css('position','relative')
     .css('margin','70px auto')
    div_width = $(window).width() - 15
    $(@el).css('width',"#{div_width}")
-    .text(
-     "·····················································  #{@category}  ·····················································")
+
+   dots = '·····················································' 
+   $(@el).text("#{dots}  #{@category}  #{dots}")
+
    $(@el).css('color','#fff')
     .css('font-size', '25px')
     .css('font-family',"'Codystar', cursive")
