@@ -16,7 +16,7 @@ include Magick
 #  b. Run format_save_size_crop_images_save_pieces
 
 class Imagen < CouchRest::Model::Base
-  extend CouchSeed
+  extend CouchSeeds
 
   PIECE_SIZE = 50
 

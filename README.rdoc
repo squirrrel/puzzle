@@ -87,7 +87,7 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - edit offsets not to overlap the board, place board adequately according to the actual image proportion
 
- - couch_seed should parse some json/yml file instead to load those values
+ - each model should be able to access only their own appropriate method - work on couch_seeds.rb
 
  - the app load is very slowwwww
 

@@ -2,7 +2,7 @@ require 'couchrest_model'
 
 # TODO: Move this model to REDIS if appropriate.
 class DivContainer < CouchRest::Model::Base
-	extend CouchSeed
+	extend CouchSeeds
 
 	property :offset_left, String
 	property :offset_top,  String

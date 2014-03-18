@@ -3,7 +3,7 @@ require 'RMagick'
 include Magick
 
 class Piece < CouchRest::Model::Base
-  extend CouchSeed
+  extend CouchSeeds
 
 	property :title,      String
 	property :imagen_id,  String
