@@ -14,9 +14,9 @@ class Puzzle.Views.Boards.Board extends Backbone.View
    @maring_top =
     if rows_number <= 4
      17.5
-    else if rows_number > 4 && rows_number <= 7
+    else if rows_number > 4 && rows_number <= 8
      15
-    else if rows_number > 7 && rows_number <= 10
+    else if rows_number > 8 && rows_number <= 10
      10
     else if rows_number > 10 && rows_number <= 12
      5
