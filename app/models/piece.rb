@@ -25,7 +25,7 @@ class Piece < CouchRest::Model::Base
     def get_and_transform_set id
       set = get_all_child_pieces(id).compact
       add_deviation_to(set)
-      add_offset_to(set)
+      add_offset_to(set, id)
       set.shuffle!
     end
 
@@ -44,12 +44,25 @@ class Piece < CouchRest::Model::Base
       end
     end
 
-    def add_offset_to set
-      all_divs = DivContainer.get_all_divs()
-      filtered_divs = 
-        if set.size <= 110
-          filter_divs(all_divs, 'small')
+    # def destroy_test picture_id
+    #   pieces.rows.map do |row|
+    #     if row.value[0] == picture_id
+    #       piece = Piece.get(row.id)
+    #       piece.destroy
+    #       row
+    #     else
+    #       #donothing
+    #     end
+    #   end
+    # end
 
+    def add_offset_to set, id
+      all_divs = DivContainer.get_all_divs()
+      filtered_divs =
+        if get(id).columns.to_i == 8
+          filter_divs(all_divs, 'large')
+        elsif set.size > 55 && set.size <= 110
+          filter_divs(all_divs, 'small')
         elsif set.size > 110
           filter_divs(all_divs, 'large')
         else

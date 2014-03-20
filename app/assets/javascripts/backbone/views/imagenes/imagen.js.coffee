@@ -47,7 +47,6 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    @options.pieces.fetch()
    $('body').css('background', "url('assets/skulls.png') repeat left top")
    $('body, html').css('overflow', 'hidden')
-   $('body').attr('id', "#{@options.imagen.get('columns')}") 
 
   display_error: (model, response) =>
    console.log response

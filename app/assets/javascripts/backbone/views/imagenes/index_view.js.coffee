@@ -46,7 +46,14 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addBoardView: () =>
    unless @options.pieces.length is 0
-    board_view = new Puzzle.Views.Boards.Board(pieces: @options.pieces)
+    image_id = @options.image_reference.first().get('image_id')
+    imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
+    columns = imagen.get('columns')   
+    board_view = 
+     new Puzzle.Views.Boards.Board(
+      pieces: @options.pieces,
+      columns: columns 
+     )
     $(@el).append(board_view.render().el)
 
   appendGalleryButton: () =>

@@ -98,7 +98,7 @@ class Imagen < CouchRest::Model::Base
 
     def insert_column
       get_all().each do |img|
-        columns = img[:width].to_i/50
+        columns = img[:width].to_i/PIECE_SIZE
         get(img[:id]).update_attributes(columns: columns)
       end
     end
@@ -121,10 +121,12 @@ class Imagen < CouchRest::Model::Base
     end
 
     def format_save_size_crop_images_save_pieces
-      images_list().each do |image|
+      #images_list()
+      [{ title: "geisha_fragments_1.jpg", category: "Art", subcategory: "Japanese_classic_art" }
+      ].each do |image|
         id = imagenes.rows.select{ |row| image[:title] == row.key}.first.id
 
-        image_params = format_save_size_of_image(image[:title])
+        image_params = format_save_size_of_image(image[:title], id)
         crop_image_save_pieces(image_params[:rows_quantity], 
                                image_params[:columns_quantity], 
                                image[:title], id)
@@ -132,6 +134,8 @@ class Imagen < CouchRest::Model::Base
     end
 
     def crop_image_save_pieces rows_quantity, columns_quantity, title, id
+      image = ImageList.new(title)
+
       # Determine step intervals
       y_steps = []
       (0...rows_quantity).each do |number|
@@ -165,7 +169,7 @@ class Imagen < CouchRest::Model::Base
 
 
 
-    def format_save_size_of_image title
+    def format_save_size_of_image title, id
       Dir.chdir("/home/ninok/projects/puzzle/app/assets/images/")
       image = ImageList.new(title)
 
