@@ -74,7 +74,7 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - Refactor session controller and hide method calls in session model, encapsulate some
 
- - Background job for this one:
+ - 2. Background job for this one:
     #$redis.flushdb
     #p '-----------------'
     #p $redis.keys('*')
@@ -87,6 +87,6 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - one piece should be put in its place in order to make puzzle solution easier and obvious.
 
- - fix bug with columns and image reference with bord view.
+ - 1. fix bug with columns and image reference with bord view.
 
-     p request.remote_ip
+ - 3. session and remote_ip could be put in a variable or any other container in order not to pass them over and over again.

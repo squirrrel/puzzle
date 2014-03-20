@@ -4,5 +4,6 @@ class ImagenesController < ApplicationController
   def index
     #$redis.flushdb
     respond_with Imagen.get_all
+    #p $redis.keys('*')
   end
 end
