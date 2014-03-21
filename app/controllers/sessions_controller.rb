@@ -2,25 +2,19 @@ class SessionsController < ApplicationController
   respond_to :json
 
   def index
-    p '--------------------'
-    p session[:session_id]
-    respond_with Session.get_pieces_for(session[:session_id],
-                                        request.remote_ip)
+    respond_with Session.get_pieces_for()
   end
 
   def destroy
-    #p $redis.keys('*')
-    Session.destroy_record(session[:session_id],
-                           request.remote_ip)
-    #Session.garbage_collect(session[:session_id],
-     #                       request.remote_ip)
+    p $redis.keys('*')
+    Session.destroy_record()
+    Session.garbage_collect()
+    p $redis.keys("*")
     render json: []
   end
 
   def update
-    returned_value = Session.update_record(params,
-                                           session[:session_id],
-                                           request.remote_ip)
+    returned_value = Session.update_record(params)
 
     response = 
       if params[:deviated]
@@ -34,16 +28,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    p '--------------------'
-    p session[:session_id]
-    Session.destroy_current_puzzle_if_any(nil, request.remote_ip)
-    Session.create_image_reference(session[:session_id],
-                                   params[:imagen_id],
-                                   request.remote_ip)
+    Session.remote_ip = request.remote_ip
+    Session.session = session[:session_id]
+
+    Session.destroy_current_puzzle_if_any()
+    Session.create_image_reference(params[:imagen_id])
 
     pieces = Piece.get_and_transform_set(params[:imagen_id])
-    Session.create_puzzle(session[:session_id], pieces,
-                          request.remote_ip)
+    Session.create_puzzle(pieces)
     render json: { pieces: pieces, location: 'imagen' }
   end
 end

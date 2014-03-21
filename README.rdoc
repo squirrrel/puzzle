@@ -72,21 +72,16 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - Either improve slow performance or show a progress bar whenever images or pieces are loaded 
 
- - Refactor session controller and hide method calls in session model, encapsulate some
-
- - 2. Background job for this one:
-    #$redis.flushdb
-    #p '-----------------'
-    #p $redis.keys('*')
-
  - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
 
  - each model should be able to access only their own appropriate method - work on couch_seeds.rb
 
- - the app load is very slow
-
  - one piece should be put in its place in order to make puzzle solution easier and obvious.
 
- - 1. fix bug with columns and image reference with bord view.
+ - bug overlapping two pieces simultaneously
 
- - 3. session and remote_ip could be put in a variable or any other container in order not to pass them over and over again.
+ - Background job for this one: there probably no need since session is no longer passed accrossed the network, but stored in a class var aka state var
+
+ - OPTIMIZE THE APP:
+
+ - review rendering of every view and resources, request image from redis as well if needed

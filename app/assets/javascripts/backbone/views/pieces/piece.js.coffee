@@ -130,10 +130,10 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    ### Auxiliary data ###
    $('.piece-of-puzzle').each(()->
     unless $(@).attr('id') is $(dragdrop.target).attr('id')
-     if $(@).offset().left >= dragdrop.offsetX - 39 && 
-        $(@).offset().left <= dragdrop.offsetX + 39 && 
-        $(@).offset().top >= dragdrop.offsetY - 39 && 
-        $(@).offset().top <= dragdrop.offsetY + 39
+     if $(@).offset().left >= dragdrop.offsetX - 45 && 
+        $(@).offset().left <= dragdrop.offsetX + 45 && 
+        $(@).offset().top >= dragdrop.offsetY - 45 && 
+        $(@).offset().top <= dragdrop.offsetY + 45
       matched_pieces_container.push('overlapped')
    )
 

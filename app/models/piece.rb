@@ -38,7 +38,7 @@ class Piece < CouchRest::Model::Base
           piece[:title] = row.value[1]
           piece[:id] = row.id
           piece[:order]  = row.key
-        # piece[:imagen_id] = row.value[0]
+          piece[:imagen_id] = row.value[0]
           piece.with_indifferent_access 
         end
       end
