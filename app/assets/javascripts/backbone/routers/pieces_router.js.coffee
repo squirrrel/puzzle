@@ -3,14 +3,17 @@ class Puzzle.Routers.PiecesRouter extends Backbone.Router
     ""        : "index"
 
   index: ->
-    console.log @pieces = new Puzzle.Collections.SessionsCollection()
-    console.log @imagenes = new Puzzle.Collections.ImagensCollection()
-    console.log @image_reference = new Puzzle.Collections.ImageReferencesCollection()
+    @pieces = new Puzzle.Collections.SessionsCollection()
+    @imagenes = new Puzzle.Collections.ImagensCollection()
+    @image_reference = new Puzzle.Collections.ImageReferencesCollection()
     @categories = new Puzzle.Collections.CategoriesCollection()
-    @image_reference.fetch()    
-    @categories.fetch()
-    @pieces.fetch()
+    @pieces.fetch()   
     @imagenes.fetch()
+    @image_reference.fetch()
+    @categories.fetch()
+    console.log @pieces
+    console.log @imagenes
+    console.log @categories
     @view = new Puzzle.Views.Imagenes.IndexView(
      pieces: @pieces,
      imagenes: @imagenes,

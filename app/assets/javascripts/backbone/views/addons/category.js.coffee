@@ -5,8 +5,8 @@ class Puzzle.Views.Addons.Category extends Backbone.View
 
   initialize: () ->
    @category = @options.category.get('category')
-   @options.imagenes.bind('reset', @render)
    @options.category.bind('reset', @render)
+   @options.imagenes.bind('reset', @render)
    @options.pieces.bind('reset', @render)
 
   render: =>

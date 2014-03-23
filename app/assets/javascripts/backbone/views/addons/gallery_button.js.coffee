@@ -5,6 +5,7 @@ class Puzzle.Views.Addons.GalleryButton extends Backbone.View
 
   initialize: () -> 
    @options.pieces.bind('reset', @render)
+   @options.image_reference.bind('reset', @render)
    $(@el).bind('click', @goToGallery)
 
   render: =>
@@ -41,5 +42,5 @@ class Puzzle.Views.Addons.GalleryButton extends Backbone.View
   goToGallery: () =>
    session = new Puzzle.Models.Session(id: 'id')
    session.destroy()
-   @options.image_reference.fetch()
    @options.pieces.reset()
+   @options.image_reference.reset()

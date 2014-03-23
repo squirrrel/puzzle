@@ -70,7 +70,7 @@ and delete completely the solved puzzle at the close  button click on the tiny c
 or by choosing/clicking on any other image to start new game
 b. we can reset completely session, deleting as usual with destroy_record + add the deletion of image_reference there
 
- - Either improve slow performance or show a progress bar whenever images or pieces are loaded 
+ - 2.Either improve slow performance or show a progress bar whenever images or pieces are loaded 
 
  - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
 
@@ -78,10 +78,10 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - one piece should be put in its place in order to make puzzle solution easier and obvious.
 
- - bug overlapping two pieces simultaneously
+ - 1.bug overlapping two pieces simultaneously
 
- - Background job for this one: there probably no need since session is no longer passed accrossed the network, but stored in a class var aka state var
+ - Background job for deleting outdated sessions
 
  - OPTIMIZE THE APP:
 
- - review rendering of every view and resources, request image from redis as well if needed
+ - keep images in redis/read on redis scaling/images load will be way faster when assets precompiled

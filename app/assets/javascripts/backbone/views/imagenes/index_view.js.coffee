@@ -36,6 +36,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addCategoriesView: () =>
    if @options.pieces.length is 0
+    console.log 'hi'
     categories_view = 
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
@@ -71,7 +72,8 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     hidden_div_view = 
      new Puzzle.Views.Addons.HiddenDiv(
       pieces: @options.pieces,
-      image_reference: @options.image_reference
+      image_reference: @options.image_reference,
+      imagenes: @options.imagenes
      )
     $(@el).append(hidden_div_view.render().el)  
 
@@ -80,7 +82,6 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    $('body').append(marks_view.render().el)  
 
   appendCurrentPuzzle: () =>
-   console.log @options.image_reference
    if @options.image_reference.length isnt 0 && @options.pieces.length is 0
     image_id = @options.image_reference.first().get('image_id')
     imagen = @options.imagenes.where({ id: "#{image_id}" })[0]

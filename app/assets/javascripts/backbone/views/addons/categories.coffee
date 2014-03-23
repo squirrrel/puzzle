@@ -3,7 +3,6 @@ Puzzle.Views.Addons ||= {}
 class Puzzle.Views.Addons.Categories extends Backbone.View
 
   initialize: () ->
-   @options.categories.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
    @options.pieces.bind('reset', @render)
 
@@ -29,7 +28,7 @@ class Puzzle.Views.Addons.Categories extends Backbone.View
   addOne: (category) =>
    category_view = 
     new Puzzle.Views.Addons.Category(
-     category: category, 
+     category: category,
      imagenes: @options.imagenes,
      pieces: @options.pieces
     )

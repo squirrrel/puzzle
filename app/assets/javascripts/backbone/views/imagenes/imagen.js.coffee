@@ -6,6 +6,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
   initialize: () ->
    @options.imagen.bind('reset', @render)
    @options.pieces.bind('reset', @render)
+   @options.imagenes.bind('reset', @render)
 
    image_height = @options.imagen.get('height')
    image_width = @options.imagen.get('width')
@@ -43,7 +44,6 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $('#categories').fadeOut()
 
   display_puzzle: (model, response) =>
-   @options.imagenes.reset()
    @options.pieces.fetch()
    $('body').css('background', "url('assets/skulls.png') repeat left top")
    $('body, html').css('overflow', 'hidden')
