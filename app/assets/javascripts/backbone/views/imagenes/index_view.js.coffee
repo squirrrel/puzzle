@@ -12,17 +12,18 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   render: =>
    $(@el).html(@template())
    @decideOnBackground()
-   @appendCurrentPuzzle()
+   @addBoardView()
    @appendGalleryButton()
    @appendHiddenDiv()
-   @addBoardView()
    @addPiecesView()
    @addCategoriesView()
+   @appendCurrentPuzzle()
    ###@addLowerMarks()###
    return this
 
   addPiecesView: () =>
    unless @options.pieces.length is 0
+    @setOffsetForAprioriMatched()
     pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: @options.pieces)
     $(@el).append(pieces_view.render().el)
 
@@ -36,7 +37,6 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addCategoriesView: () =>
    if @options.pieces.length is 0
-    console.log 'hi'
     categories_view = 
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
@@ -47,12 +47,10 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   addBoardView: () =>
    unless @options.pieces.length is 0
-    image_id = @options.pieces.first().get('imagen_id')
-    imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
     board_view = 
      new Puzzle.Views.Boards.Board(
       pieces: @options.pieces,
-      columns: imagen.get("columns")
+      columns: @getColumnsNumber()
      )
     $(@el).append(board_view.render().el)
 
@@ -83,21 +81,37 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
 
   appendCurrentPuzzle: () =>
    if @options.image_reference.length isnt 0 && @options.pieces.length is 0
-    image_id = @options.image_reference.first().get('image_id')
-    imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
     current_puzzle = 
      new Puzzle.Views.Addons.CurrentPuzzle(
-      imagen: imagen,
+      imagen: @getCurrentImage(),
       pieces: @options.pieces,
       imagenes: @options.imagenes
      )
     $(@el).append(current_puzzle.render().el)
 
-  matched_pieces_number: () =>
+  matched_pieces_number: () ->
    matched_pieces = []
    _.map(@options.pieces.toJSON(),
          (piece)-> matched_pieces.push(piece.matched) if piece.matched is 'matched' )
    matched_pieces
+
+  getCurrentImage: () ->
+   image_id = @options.image_reference.first().get('image_id')
+   imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
+
+  getColumnsNumber: () ->
+   image_id = @options.pieces.first().get('imagen_id')
+   imagen = @options.imagenes.where({ id: "#{image_id}" })[0]
+   imagen.get("columns")
+
+  setOffsetForAprioriMatched: () ->
+   pieces = @options.pieces.where({ apriori: 'apriori' })
+   _.each(pieces, (apriori_matched_piece) -> 
+    order = apriori_matched_piece.get('order')    
+    cell_offset = $("div##{order}").offset()
+    apriori_matched_piece.set({ x: cell_offset.left, y: cell_offset.top})
+   )
+
 
 
   ###drawCanvas: ->

@@ -76,9 +76,10 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - each model should be able to access only their own appropriate method - work on couch_seeds.rb
 
- - one piece should be put in its place in order to make puzzle solution easier and obvious.
-
  - 1.bug overlapping two pieces simultaneously
+
+ - One neighboring piece could be added to one of apriori matched?
+ - Current Puzzle Image should be alive during the actual play too?
 
  - Background job for deleting outdated sessions
 

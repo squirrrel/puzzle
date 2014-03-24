@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Session.get_pieces_for()
+    respond_with Session.get_pieces()
   end
 
   def destroy

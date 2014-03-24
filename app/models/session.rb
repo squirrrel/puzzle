@@ -19,7 +19,7 @@ class Session
     def create_puzzle pieces
       pieces.each do |piece|
         $redis.hmset("#{remote_ip}.#{session}.pieces.#{piece[:id]}",
-                     :title, piece[:title], 
+                     :title, piece[:title],
                      :id, piece[:id], 
                      :deviation, piece[:deviation],
                      :x, piece[:key],
@@ -28,10 +28,16 @@ class Session
                      :imagen_id, piece[:imagen_id])
 
         $redis.sadd("#{remote_ip}.#{session}.ids", piece[:id])
+
+        if piece[:apriori]
+          $redis.hmset("#{remote_ip}.#{session}.pieces.#{piece[:id]}",
+                       :matched, piece[:matched],
+                       :apriori, piece[:apriori])
+        end
       end
     end
 
-    def get_pieces_for
+    def get_pieces
       result_set = []
       item_ids = $redis.smembers("#{remote_ip}.#{session}.ids") 
 
@@ -44,7 +50,6 @@ class Session
     end
 
     def create_image_reference image_id
-      p "#{remote_ip}.#{session}.image_reference"
       $redis.hset("#{remote_ip}.#{session}.image_reference", :image_id, image_id)
     end
 
@@ -52,6 +57,39 @@ class Session
     def get_image_reference
       image_id = $redis.hget("#{remote_ip}.#{session}.image_reference", :image_id)
       [{ image_id: image_id }] if image_id
+    end
+
+    def create_images_collection images
+      images.each do |image|
+        $redis.hmset("images_collection.#{image[:id]}",
+                      :id, image[:id],
+                      :title, image[:title],
+                      :category, image[:category],
+                      :width, image[:width],
+                      :height, image[:height],
+                      :columns, image[:columns])
+
+        if image[:subcategory]
+          $redis.hset("images_collection.#{image[:id]}", 
+                       :subcategory, 
+                       image[:subcategory])
+        end
+      end
+    end
+
+    def get_images_collection
+      all_image_keys = $redis.keys("images_collection.*")
+
+      return [] unless all_image_keys
+
+      result_set = []
+
+      all_image_keys.each do |key|
+        result_set << $redis.hgetall(key).with_indifferent_access
+
+      end
+
+      result_set.sort_by { |hsh| hsh[:title] }
     end
 
     # delete only remote_ip.session.pieces.id/remote_ip.session.ids/remote_ip.session.image_reference

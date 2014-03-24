@@ -45,6 +45,28 @@ class Imagen < CouchRest::Model::Base
   class << self
 
     def get_all
+      session_collection = Session.get_images_collection()
+
+      p 'get flow'
+      p session_collection.empty?
+
+      return session_collection unless session_collection.empty?
+
+      p 'create flow'   
+
+      Session.create_images_collection(get_images_from_couch())
+      Session.get_images_collection()
+    end
+
+    # Add the subcategory information to the result in order to sort by subcategory also????
+    def get_categories
+      categories = by_category.reduce.group_level(1).rows
+      categories.map!{ |category| { category: category['key'] } }     
+    end
+
+  # private
+
+    def get_images_from_couch
       imagenes.rows.map! do |row|
         imagen = {}
         val = row.value.with_indifferent_access
@@ -58,16 +80,9 @@ class Imagen < CouchRest::Model::Base
         imagen[:subcategory] = val[:subcategory] unless val[:subcategory] == 'none' 
 
         imagen
-      end
+      end 
     end
 
-    # Add the subcategory information to the result in order to sort by subcategory also????
-    def get_categories
-      categories = by_category.reduce.group_level(1).rows
-      categories.map!{ |category| { category: category['key'] } }     
-    end
-
-  # private
     def create_imagenes
       images_list().map do |image|
         new_record = 

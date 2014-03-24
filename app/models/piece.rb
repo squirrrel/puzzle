@@ -26,6 +26,7 @@ class Piece < CouchRest::Model::Base
       set = get_all_child_pieces(id).compact
       add_deviation_to(set)
       add_offset_to(set, id)
+      set_apriori_matched_piece(set)
       set.shuffle!
     end
 
@@ -99,6 +100,16 @@ class Piece < CouchRest::Model::Base
       end
 
       set
+    end
+
+    def set_apriori_matched_piece set
+      3.times do
+        random_index = rand(set.size)
+        piece = set[random_index]
+        piece[:deviation] = 360
+        piece[:matched] = 'matched'
+        piece[:apriori] = 'apriori'
+      end
     end
   end
 end 
