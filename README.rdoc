@@ -1,5 +1,5 @@
-== Purpose
-=== Primary, puzzle is to be designed in order to learn Backbone.js features and apply them on practice.
+=== Purpose
+ Primary, puzzle is to be designed in order to learn Backbone.js features and apply them on practice.
 
 === USER STORIES
 
@@ -42,35 +42,20 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 * Backbone.js 
 
 === Backlog:
- * On image select, user will see the board and pieces. On change we send a request to backend, it makes certain Session to the pieces of puzzle and divs, stores it as a metadata as a whole new Session class, and returns the pieces. On each refresh backbone than requests only Sessions out of pieces and divs.
- 5. Pry
- 9. Beautify game
- 11. Add divs coordinates from below the board.
- 14. The dragged piece cannot overlap any other after dragend otherwise it is dragged near or backard
 
-SATERDAY:
- 3. Cut all images, save pieces to the db, in the meantime:
-  - Complicated image pieces should be bigger, easy one pieces should a bit be smaller
-  - Define weather an image is complicates or easy
-  - Define proportion of and image/ or natural width/height to display them properly
-
- 17. Cut all of the images from my collection wisely
- 18. Beautify Cover div should have a pseudo-button
- 19. RELASE 1.1 - time should be limited and there should be a time out to get user more competitive
+==== RELASE 1.1 
+  time should be limited and there should be a time out to get user more competitive
  Some score rating should be present as well...perhaps...
- 20. RELEASE 1.2 - user should be able to add some new images to gallery
- 21. RELEASE 1.3 - pieces should resemble to puzzle curly pieces no squares anymore
- RELEASE 1.4 - User story: as a user, I should be able to match any number of pieces everywhere on the screen
+==== RELEASE 1.2 
+  user should be able to add some new images to gallery
+==== RELEASE 1.3 
+  pieces should resemble to puzzle curly pieces no squares anymore
+==== RELEASE 1.4 
+  User story: as a user, I should be able to match any number of pieces everywhere on the screen
  and place them to the board, if the entire pieces tandem is matched with the board, then it is frozen,
  otherwise it can be dragged elsewhere where there is enough space? Possibly, a limited number of pieces can be matched that way in order to make them more movable and not blocked by other pieces.
-
- - For when the puzzle is solved and the Back to Gallery is clicked:
-  a. we can apply the same workflow as for Back to Gallery when the puzzle is not yet finished
-and delete completely the solved puzzle at the close  button click on the tiny corner img 
-or by choosing/clicking on any other image to start new game
-b. we can reset completely session, deleting as usual with destroy_record + add the deletion of image_reference there
-
- - 2.Either improve slow performance or show a progress bar whenever images or pieces are loaded 
+==== RELEASE 1.5: 
+ Android version?
 
  - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
 
@@ -78,11 +63,8 @@ b. we can reset completely session, deleting as usual with destroy_record + add 
 
  - 1.bug overlapping two pieces simultaneously
 
- - One neighboring piece could be added to one of apriori matched?
  - Current Puzzle Image should be alive during the actual play too?
 
- - Background job for deleting outdated sessions
-
- - OPTIMIZE THE APP:
-
- - keep images in redis/read on redis scaling/images load will be way faster when assets precompiled
+ - 1. Get loading folded in a nice progressbar-image
+ - 2. Background job for deleting outdated sessions
+ - 3. Check latest changes with image kept in redis 

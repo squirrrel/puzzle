@@ -98,7 +98,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
     $(".cell").css('background-color', 'rgba(255,255,255,0.0')
     $("##{id}").css('background-color','rgba(255,195,122,0.5)')
 
-   $(dragdrop.proxy).css('z-index', '10')
+   $(dragdrop.proxy).css('z-index', '2000')
     .css({ top: dragdrop.offsetY, left: dragdrop.offsetX })
 
   dragEnd: (event, dragdrop) =>
@@ -151,12 +151,12 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
      $(".cell").css('background-color', 'rgba(255,255,255,0.0')
      if dragdrop.offsetY < 0 || dragdrop.offsetY > $(window).height() - h_percentage || 
         dragdrop.offsetX < 0 || dragdrop.offsetX > $(window).width() - w_percentage || 
-        matched_pieces_container.length is 1
+        matched_pieces_container.length > 0
       top_y: dragdrop.originalY, left_x: dragdrop.originalX
      else
       top_y: dragdrop.offsetY, left_x: dragdrop.offsetX
     else
-     if matched_cell_pieces_container.length is 1 || matched_pieces_container is 1
+     if matched_cell_pieces_container.length is 1 || matched_pieces_container > 0
       top_y: dragdrop.originalY, left_x: dragdrop.originalX
      else
       top_y: matched_cells_container[0].top_y, left_x: matched_cells_container[0].left_x
