@@ -28,7 +28,13 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
    $('#button').fadeIn()
 
   goToGallery: () =>
+   @appendCover()
    session = new Puzzle.Models.Session(id: 'id', hidden: 'hidden')
    session.save(session, { silent: true, wait: true })
    @options.image_reference.fetch()
    @options.pieces.reset()
+
+  appendCover: () ->
+   console.log 'Worked'
+   cover_view = new Puzzle.Views.Addons.Cover()
+   $('body').append(cover_view.render().el)

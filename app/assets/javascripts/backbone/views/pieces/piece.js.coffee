@@ -5,12 +5,16 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   initialize: () ->
    @piece = @options.piece.toJSON()
+   last_piece_id =  @options.pieces.first().get('id')
    unless @piece.matched is 'matched'
     $(@el).bind('click', @rotatePieceOnClick)
      .bind('draginit', @dragInit)
      .bind('dragstart', @dragStart)
      .bind('drag', @dragPiece)
      .bind('dragend', @dragEnd)
+   if last_piece_id is @piece.id
+    $(@el).bind('load', @fadeOutCover)
+
 
   render: =>
    $(@el).attr('id', @piece.id)
@@ -34,6 +38,9 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
    else if @piece.matched is 'half-matched'
     $(@el).addClass('half-matched')
    return this
+
+  fadeOutCover: () =>
+   $("#cover").fadeOut().remove()
 
   rotatePieceOnClick: (event) =>
    session = new Puzzle.Models.Session(id: $(@el).attr('id'), deviated: 'deviated')

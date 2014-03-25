@@ -40,7 +40,12 @@ class Puzzle.Views.Addons.GalleryButton extends Backbone.View
    return this
 
   goToGallery: () =>
+   @appendCover()
    session = new Puzzle.Models.Session(id: 'id')
    session.destroy()
    @options.pieces.reset()
    @options.image_reference.reset()
+
+  appendCover: () ->
+   cover_view = new Puzzle.Views.Addons.Cover()
+   $('body').append(cover_view.render().el)

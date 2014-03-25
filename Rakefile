@@ -4,3 +4,9 @@
 require File.expand_path('../config/application', __FILE__)
 
 Puzzle::Application.load_tasks
+
+task :garbage => :environment do
+  Session.garbage_collect()
+end
+
+

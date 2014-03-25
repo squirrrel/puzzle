@@ -51,6 +51,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
 
 
   getCurrentPuzzle: () =>
+   @appendCover()
    imagen = new Puzzle.Models.Session(
     id: 'id', 
     restore_current: 'restore_current'
@@ -70,3 +71,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
    percentage = @cp_width*100/Number(width)
 
    Number(height)*percentage/100
+
+  appendCover: () =>
+   cover_view = new Puzzle.Views.Addons.Cover()
+   $('body').append(cover_view.render().el)

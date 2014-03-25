@@ -68,3 +68,6 @@ OR: it can only be moved from the free zone onto the board and back to its origi
  - 1. Get loading folded in a nice progressbar-image
  - 2. Background job for deleting outdated sessions
  - 3. Check latest changes with image kept in redis 
+
+ - 4. Prototype Javascript
+ - 5. manual on Backbone.js

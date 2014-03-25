@@ -37,6 +37,7 @@ gem 'couchrest_model'
 gem 'rmagick'
 gem 'underscore-rails'
 gem 'redis'
+gem 'whenever', :require => false
 # gem 'jquery-drag-rails', github: 'thefrontside/jquery-drag-rails'
 	#gem "rails-backbone"
 

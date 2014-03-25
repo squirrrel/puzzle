@@ -99,6 +99,7 @@ class Session
       $redis.keys("#{remote_ip}.*").each do |key|
         $redis.del(key) unless key =~ /#{session}/ || key =~ /hidden/
       end
+      p session
     end
 
     def destroy_record

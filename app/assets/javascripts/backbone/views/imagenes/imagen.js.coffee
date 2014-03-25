@@ -20,6 +20,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
    $(@el).bind('mouseout', @shadowImages)
+   if @options.imagen.get('id') is "6cd874de2ea6aca248e693dcbb1b1ff6"
+    $(@el).bind('load', @fadeOutCover)
 
   render: =>
    $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
@@ -42,6 +44,11 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     error: @display_error 
    })
    $('#categories').fadeOut()
+   @appendCover()
+
+  appendCover: () ->
+   cover_view = new Puzzle.Views.Addons.Cover()
+   $('body').append(cover_view.render().el)
 
   display_puzzle: (model, response) =>
    @options.pieces.fetch()
@@ -72,3 +79,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    percentage = @gi_height*100/Number(height)
 
    Number(width)*percentage/100
+
+  fadeOutCover: () =>
+   console.log 'DONE'
+   $("#cover").fadeOut().remove()
