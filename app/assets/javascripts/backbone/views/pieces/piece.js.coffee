@@ -5,7 +5,7 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   initialize: () ->
    @piece = @options.piece.toJSON()
-   last_piece_id =  @options.pieces.first().get('id')
+   last_piece_id =  @options.pieces.last().get('id')
    unless @piece.matched is 'matched'
     $(@el).bind('click', @rotatePieceOnClick)
      .bind('draginit', @dragInit)

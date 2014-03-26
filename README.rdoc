@@ -64,13 +64,21 @@ OR: it can only be moved from the free zone onto the board and back to its origi
  - BUG: ocassionaly, hide_current_puzzle fails after clicking on 'Back to Gallery': ERRO Redis cannot find key: line:       $redis.rename("#{remote_ip}.#{session}.ids",
                       "#{remote_ip}.hidden.ids"). Actual: no img reference is shown
 
+  
+
   Gallery button should be available only after al resources are entirely loaded
 
+ - Find out how to separate repeating code and put it somewhere up the flow.
+
  - Current Puzzle Image should be alive during the actual play too?
+ - Image should be shown as a background for progress bar after picking it?
 
- - 1. Get loading folded in a nice progressbar-image
+
  - 2. Background job for deleting outdated sessions FAILED for now. Whenever gem works fine, except it cannot access current class variables values, therefore Session.garbage_collect cannot be scheduled. Perhaps, I try another gem?
- - 3. Check latest changes with image kept in redis 
+ - 3. Check latest changes with image kept in redis
+ - Remove imagen.js.coffee hardcode
 
- - 4. Prototype Javascript
- - 5. manual on Backbone.js
+ - Prototype Javascript
+ - manual on Backbone.js
+ - Canvas
+ - Ruby 2.1.1

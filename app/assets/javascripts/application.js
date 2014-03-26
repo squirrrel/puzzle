@@ -20,3 +20,4 @@
 //= require_tree .
 //= require jquery.event.drag-2.2/jquery.event.drag-2.2
 //= require jquery.event.drag-2.2/jquery.event.drag.live-2.2
+//= require sonic/sonic
