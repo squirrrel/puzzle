@@ -61,12 +61,15 @@ OR: it can only be moved from the free zone onto the board and back to its origi
 
  - each model should be able to access only their own appropriate method - work on couch_seeds.rb
 
- - 1.bug overlapping two pieces simultaneously
+ - BUG: ocassionaly, hide_current_puzzle fails after clicking on 'Back to Gallery': ERRO Redis cannot find key: line:       $redis.rename("#{remote_ip}.#{session}.ids",
+                      "#{remote_ip}.hidden.ids"). Actual: no img reference is shown
+
+  Gallery button should be available only after al resources are entirely loaded
 
  - Current Puzzle Image should be alive during the actual play too?
 
  - 1. Get loading folded in a nice progressbar-image
- - 2. Background job for deleting outdated sessions
+ - 2. Background job for deleting outdated sessions FAILED for now. Whenever gem works fine, except it cannot access current class variables values, therefore Session.garbage_collect cannot be scheduled. Perhaps, I try another gem?
  - 3. Check latest changes with image kept in redis 
 
  - 4. Prototype Javascript

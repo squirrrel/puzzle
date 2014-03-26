@@ -6,7 +6,6 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    p $redis.keys('*')
     Session.destroy_record()
     Session.garbage_collect()
     p $redis.keys("*")

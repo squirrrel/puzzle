@@ -1,20 +1,21 @@
 class Session
   class << self
-    def session=(session_id)
-      @@session = session_id
-    end
+    attr_accessor :session, :remote_ip
+    # def session=(session_id)
+    #   @@session = session_id
+    # end
 
-    def session
-      @@session ||= nil
-    end
+    # def session
+    #   @@session ||= nil
+    # end
 
-    def remote_ip=(remote_ip)
-      @@remote_ip = remote_ip
-    end
+    # def remote_ip=(remote_ip)
+    #   @@remote_ip = remote_ip
+    # end
 
-    def remote_ip
-      @@remote_ip ||= nil
-    end
+    # def remote_ip
+    #   @@remote_ip ||= nil
+    # end
 
     def create_puzzle pieces
       pieces.each do |piece|
@@ -79,8 +80,9 @@ class Session
 
     def get_images_collection
       all_image_keys = $redis.keys("images_collection.*")
-
-      return [] unless all_image_keys
+      p '-------------------'
+      p all_image_keys
+      return [] if all_image_keys.empty?
 
       result_set = []
 
@@ -99,7 +101,6 @@ class Session
       $redis.keys("#{remote_ip}.*").each do |key|
         $redis.del(key) unless key =~ /#{session}/ || key =~ /hidden/
       end
-      p session
     end
 
     def destroy_record
@@ -110,9 +111,10 @@ class Session
     # TODO: refactor, for they are pretty similar
     def destroy_session_records_if_any
       item_ids = $redis.smembers("#{remote_ip}.#{session}.ids")
+      p item_ids
+      return true if item_ids.empty?
 
-      true unless item_ids
-      
+      p 'under return true for session'
       item_ids.each do |id|
         $redis.del("#{remote_ip}.#{session}.pieces.#{id}")
       end
@@ -123,8 +125,9 @@ class Session
 
     # delete hidden.ids/all hidden pieces: hidden.pieces.*
     def destroy_current_puzzle_if_any
-      true if $redis.keys("#{remote_ip}.hidden.ids").empty?
-      
+      p $redis.keys("#{remote_ip}.hidden.ids")
+      return true if $redis.keys("#{remote_ip}.hidden.ids").empty?
+      p 'under return true for hidden'      
       $redis.keys("#{remote_ip}.hidden.*").each do |key|
         $redis.del(key)
       end

@@ -1,29 +1,7 @@
-# Use this file to easily define all of your cron jobs.
-#
-# It's helpful, but not entirely necessary to understand cron before proceeding.
-# http://en.wikipedia.org/wiki/Cron
+# set :output, "/home/ninok/projects/puzzle/log/cron.log"
+# set :environment, :development
 
-# Example:
-#
-# set :output, "/path/to/my/cron_log.log"
-#
-# every 2.hours do
-#   command "/usr/bin/some_great_command"
-#   runner "MyModel.some_method"
-#   rake "some:great:rake:task"
+# every 3.minutes do
+#   runner "Session.garbage_collect"
+#   #rake "garbage"
 # end
-#
-# every 4.days do
-#   runner "AnotherModel.prune_old_records"
-# end
-
-# Learn more: http://github.com/javan/whenever
-
-set :output, "/home/ninok/projects/puzzle/log/cron.log"
-set :environment, :development
-
-every 6.minutes do
-  #command "RAILS_ENV=development"
-  runner "Session.destroy_current_puzzle_if_any"
-  #rake "garbage"
-end
