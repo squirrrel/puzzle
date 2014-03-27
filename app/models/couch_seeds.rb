@@ -1,32 +1,21 @@
-# IT SHOULD BE PUT TO A JSON OR YAML FILE AND PARSED FROM HERE
-# Try to extend only for a particular class
+# TODO: refactor at a later time
 require 'json'
 
 module CouchSeeds
-  # module DivSeeds
-  #   def divs_list
-  #     json = File.read('db/divs_seeds.json')
-  #     JSON.parse(json).with_indifferent_access[:divs]
-  #   end
-  # end
+  def self.extended(klass)
+    klass.extend(eval("#{klass}slave"))
+  end
 
-  # module ImageSeeds
-  #   def images_list
-  #     json = File.read('db/images_seeds.json')
-  #     JSON.parse(json).with_indifferent_access[:images]
-  #   end
-  # end
+  CouchSeeds.class_exec do
+    ['DivContainerslave', 'Imagenslave', 'Pieceslave'].each do |module_name|
+      module_body = Module.new do
+        define_method "#{module_name.downcase}_list" do
+          json = File.read("db/#{module_name.downcase}_seeds.json")
+          JSON.parse(json).with_indifferent_access["#{module_name.downcase}"]
+        end
+      end
 
-  # module PieceSeeds
-  #   def pieces_list
-  #     json = File.read('db/pieces_seeds.json')
-  #     JSON.parse(json).with_indifferent_access[:pieces]
-  #   end
-  # end
-  ['divs', 'images', 'pieces'].each do |method|
-    define_method "#{method}_list" do
-      json = File.read("db/#{method}_seeds.json")
-      JSON.parse(json).with_indifferent_access["#{method}"]
+      CouchSeeds.const_set(:"#{module_name}", module_body)
     end
   end
 end

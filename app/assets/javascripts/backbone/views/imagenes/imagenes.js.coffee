@@ -18,6 +18,7 @@ class Puzzle.Views.Imagenes.Imagenes extends Backbone.View
     category: @options.category,
     imagen: imagen,
     imagenes: @options.imagenes,
-    pieces: @options.pieces
+    pieces: @options.pieces,
+    last_image_id: @options.last_image_id
    )
    $(@el).append(imagen_view.render().el)

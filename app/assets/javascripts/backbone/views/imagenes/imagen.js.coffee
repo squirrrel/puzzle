@@ -20,7 +20,8 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    $(@el).bind('click', @servePuzzle)
    $(@el).bind('mouseover', @highlightImage)
    $(@el).bind('mouseout', @shadowImages)
-   if @options.imagen.get('id') is "6cd874de2ea6aca248e693dcbb1b1ff6"
+
+   if @options.imagen.get('id') is @options.last_image_id
     $(@el).bind('load', @fadeOutCover)
 
   render: =>
@@ -44,48 +45,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     error: @display_error 
    })
    $('#categories').fadeOut()
-   @appendCover()
-   @addProgressBar()
-
-  appendCover: () ->
-   cover_view = new Puzzle.Views.Addons.Cover()
-   $('body').append(cover_view.render().el)
-
-  addProgressBar: () =>
-   clock = new Sonic(
-    width: 100,
-    height: 100,
-    stepsPerFrame: 1,
-    trailLength: 1,
-    pointDistance: .05,
-    strokeColor: '#FF2E82',
-    fps: 20,
-
-    path: [
-     ['arc', 50, 50, 40, 0, 360]
-    ],
-
-    setup: () -> this._.lineWidth = 4,
-
-    step: (point, index) ->
-     cx = this.padding + 50
-     cy = this.padding + 50
-     _ = this._
-     angle = (Math.PI/180) * (point.progress * 360)
-     innerRadius = if index is 1 then 10 else 25
-     _.beginPath()
-     _.moveTo(point.x, point.y)
-     _.lineTo((Math.cos(angle) * innerRadius) + cx, (Math.sin(angle) * innerRadius) + cy)
-     _.closePath()
-     _.stroke()
-   )
-
-   cover = document.getElementById('cover')
-   cover.appendChild(clock.canvas)
-   clock.canvas.style.marginTop = '20%'
-   clock.canvas.style.marginBottom = '20%'
-   clock.canvas.style.marginLeft = '45%'
-   clock.play()
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
 
   display_puzzle: (model, response) =>
    @options.pieces.fetch()
@@ -117,6 +77,5 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
 
    Number(width)*percentage/100
 
-  fadeOutCover: () =>
-   console.log 'DONE'
+  fadeOutCover: () ->
    $("#cover").fadeOut().remove()

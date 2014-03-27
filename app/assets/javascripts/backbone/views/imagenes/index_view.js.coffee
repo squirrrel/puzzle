@@ -4,10 +4,10 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
   template: JST["backbone/templates/imagenes/index"]
 
   initialize: () ->
+   @options.categories.bind('reset', @render)
    @options.image_reference.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
    @options.pieces.bind('reset', @render)
-   @options.categories.bind('reset', @render)
 
   render: =>
    $(@el).html(@template())
@@ -41,7 +41,8 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
      new Puzzle.Views.Addons.Categories(
       categories: @options.categories, 
       imagenes: @options.imagenes,
-      pieces: @options.pieces
+      pieces: @options.pieces,
+      last_image_id: @getLastImageId()
      )
     $(@el).append(categories_view.render().el)
 
@@ -111,6 +112,54 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     cell_offset = $("div##{order}").offset()
     apriori_matched_piece.set({ x: cell_offset.left, y: cell_offset.top})
    )
+
+  getLastImageId: () ->
+   if @options.categories.last()
+    last_category_name =  @options.categories.last().get('category')
+    last_category_images = @options.imagenes.where({ category: last_category_name })
+    last_category_length = last_category_images.length
+    last_imagen_id = last_category_images[Number(last_category_length) - 1].id
+
+  appendCover: () ->
+   cover_view = new Puzzle.Views.Addons.Cover()
+   $('body').append(cover_view.render().el)
+
+  addProgressBar: () ->
+    @appendCover()
+    clock = new Sonic(
+      width: 100,
+      height: 100,
+      stepsPerFrame: 1,
+      trailLength: 1,
+      pointDistance: .05,
+      strokeColor: '#FF2E82',
+      fps: 20,
+
+      path: [
+       ['arc', 50, 50, 40, 0, 360]
+      ],
+
+      setup: () -> this._.lineWidth = 4,
+
+      step: (point, index) ->
+       cx = this.padding + 50
+       cy = this.padding + 50
+       _ = this._
+       angle = (Math.PI/180) * (point.progress * 360)
+       innerRadius = if index is 1 then 10 else 25
+       _.beginPath()
+       _.moveTo(point.x, point.y)
+       _.lineTo((Math.cos(angle) * innerRadius) + cx, (Math.sin(angle) * innerRadius) + cy)
+       _.closePath()
+       _.stroke()
+    )
+
+    cover = document.getElementById('cover')
+    cover.appendChild(clock.canvas)
+    clock.canvas.style.marginTop = '20%'
+    clock.canvas.style.marginBottom = '20%'
+    clock.canvas.style.marginLeft = '45%'
+    clock.play()
 
 
 
