@@ -43,28 +43,11 @@ class Imagen < CouchRest::Model::Base
   end
 
   class << self
-
-    def get_all
-      session_collection = Session.get_images_collection()
-
-      p 'get flow'
-      p session_collection.empty?
-
-      return session_collection unless session_collection.empty?
-
-      p 'create flow'   
-
-      Session.create_images_collection(get_images_from_couch())
-      Session.get_images_collection()
-    end
-
     # Add the subcategory information to the result in order to sort by subcategory also????
     def get_categories
       categories = by_category.reduce.group_level(1).rows
       categories.map!{ |category| { category: category['key'] } }     
     end
-
-  # private
 
     def get_images_from_couch
       imagenes.rows.map! do |row|
@@ -83,8 +66,10 @@ class Imagen < CouchRest::Model::Base
       end 
     end
 
+    private
+
     def create_imagenes
-      images_list().map do |image|
+      imagenslave_list().map do |image|
         new_record = 
           if image[:subcategory]
               {title: image[:title],
@@ -100,7 +85,7 @@ class Imagen < CouchRest::Model::Base
 
     def save_image_size
       Dir.chdir("/home/ninok/projects/puzzle/app/assets/images/")
-      images_list().each do |img|
+      imagenslave_list().each do |img|
         image_file = ImageList.new(img[:title])
 
         id = imagenes.rows.select{ |row| img[:title] == row.key}.first.id
@@ -119,7 +104,7 @@ class Imagen < CouchRest::Model::Base
     end
 
     def create_pedazos
-      pieces_list().each do |piece|
+      pieceslave_list().each do |piece|
         create_piece(piece[:title], 
                      piece[:imagen_id], 
                      piece[:order])
@@ -136,9 +121,7 @@ class Imagen < CouchRest::Model::Base
     end
 
     def format_save_size_crop_images_save_pieces
-      #images_list()
-      [{ title: "geisha_fragments_1.jpg", category: "Art", subcategory: "Japanese_classic_art" }
-      ].each do |image|
+      imagenslave_list().each do |image|
         id = imagenes.rows.select{ |row| image[:title] == row.key}.first.id
 
         image_params = format_save_size_of_image(image[:title], id)

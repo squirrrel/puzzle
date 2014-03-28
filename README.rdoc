@@ -54,25 +54,17 @@ OR: it can only be moved from the free zone onto the board and back to its origi
   User story: as a user, I should be able to match any number of pieces everywhere on the screen
  and place them to the board, if the entire pieces tandem is matched with the board, then it is frozen,
  otherwise it can be dragged elsewhere where there is enough space? Possibly, a limited number of pieces can be matched that way in order to make them more movable and not blocked by other pieces.
-==== RELEASE 1.5: 
+==== RELEASE 2.0: 
  Android version?
 
  - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
 
-
- - BUG: ocassionaly, hide_current_puzzle fails after clicking on 'Back to Gallery': ERRO Redis cannot find key: line:       $redis.rename("#{remote_ip}.#{session}.ids",
-                      "#{remote_ip}.hidden.ids"). Actual: no img reference is shown
-
-  
-
-  Gallery button should be available only after all resources are entirely loaded
-
  - Current Puzzle Image should be alive during the actual play too?
- - Image should be shown as a background for progress bar after picking it?
-
 
  - Background job for deleting outdated sessions FAILED for now. Whenever gem works fine, except it cannot access current class variables values, therefore Session.garbage_collect cannot be scheduled. Perhaps, I try another gem?
  - 3. Check latest changes with image kept in redis
+
+ - write a set-up guide
 
  - Prototype Javascript
  - manual on Backbone.js

@@ -17,7 +17,7 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
     .css('left','35%')
     .css('top','93%')
     .css('cursor','pointer')
-    .css('display','inline')
+    .css('display','none')
     .css('z-index','100')
    return this
 
@@ -28,7 +28,7 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
    $('#button').fadeIn()
 
   goToGallery: () =>
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar('none','black_cover')
    session = new Puzzle.Models.Session(id: 'id', hidden: 'hidden')
    session.save(session, { silent: true, wait: true })
    @options.image_reference.fetch()

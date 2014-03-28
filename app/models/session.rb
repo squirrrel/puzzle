@@ -60,6 +60,16 @@ class Session
       [{ image_id: image_id }] if image_id
     end
 
+    def get_all_images
+      session_collection = get_images_collection()
+
+      return session_collection unless session_collection.empty?
+
+      create_images_collection(Imagen.get_images_from_couch())
+
+      get_images_collection()
+    end
+
     def create_images_collection images
       images.each do |image|
         $redis.hmset("images_collection.#{image[:id]}",
@@ -72,16 +82,14 @@ class Session
 
         if image[:subcategory]
           $redis.hset("images_collection.#{image[:id]}", 
-                       :subcategory, 
-                       image[:subcategory])
+                       :subcategory, image[:subcategory])
         end
       end
     end
 
     def get_images_collection
       all_image_keys = $redis.keys("images_collection.*")
-      p '-------------------'
-      p all_image_keys
+
       return [] if all_image_keys.empty?
 
       result_set = []

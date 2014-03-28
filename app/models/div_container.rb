@@ -26,7 +26,7 @@ class DivContainer < CouchRest::Model::Base
     end
 
     def create_divs
-      divs_list().map do |_,value|
+      divcontainerslave_list().map do |_,value|
         create!(offset_left: value[0],offset_top: value[1])   
       end
     end

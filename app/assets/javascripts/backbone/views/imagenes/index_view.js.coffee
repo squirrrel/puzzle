@@ -120,12 +120,12 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     last_category_length = last_category_images.length
     last_imagen_id = last_category_images[Number(last_category_length) - 1].id
 
-  appendCover: () ->
-   cover_view = new Puzzle.Views.Addons.Cover()
+  appendCover: (background, flag) ->
+   cover_view = new Puzzle.Views.Addons.Cover(background: background, flag: flag)
    $('body').append(cover_view.render().el)
 
-  addProgressBar: () ->
-    @appendCover()
+  addProgressBar: (background, flag) ->
+    @appendCover(background, flag)
     clock = new Sonic(
       width: 100,
       height: 100,

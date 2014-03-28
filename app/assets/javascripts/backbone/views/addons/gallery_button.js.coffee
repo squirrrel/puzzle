@@ -41,7 +41,7 @@ class Puzzle.Views.Addons.GalleryButton extends Backbone.View
    return this
 
   goToGallery: () =>
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar('none','black_cover')
    session = new Puzzle.Models.Session(id: 'id')
    session.destroy()
    @options.pieces.reset()

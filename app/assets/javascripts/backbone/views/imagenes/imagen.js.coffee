@@ -7,6 +7,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
    @options.imagen.bind('reset', @render)
    @options.pieces.bind('reset', @render)
    @options.imagenes.bind('reset', @render)
+   @image_title = @options.imagen.get('title')
 
    image_height = @options.imagen.get('height')
    image_width = @options.imagen.get('width')
@@ -25,7 +26,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     $(@el).bind('load', @fadeOutCover)
 
   render: =>
-   $(@el).attr('src', "/assets/#{@options.imagen.get('title')}")
+   $(@el).attr('src', "/assets/#{@image_title}")
     .attr('id',"#{@options.imagen.toJSON().id}")
     .attr('class','imagenes')
     .css('height', @gi_height)
@@ -45,7 +46,7 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     error: @display_error 
    })
    $('#categories').fadeOut()
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar(@image_title, 'scene')
 
   display_puzzle: (model, response) =>
    @options.pieces.fetch()

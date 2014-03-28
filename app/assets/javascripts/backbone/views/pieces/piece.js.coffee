@@ -5,13 +5,15 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   initialize: () ->
    @piece = @options.piece.toJSON()
-   last_piece_id =  @options.pieces.last().get('id')
+
    unless @piece.matched is 'matched'
     $(@el).bind('click', @rotatePieceOnClick)
      .bind('draginit', @dragInit)
      .bind('dragstart', @dragStart)
      .bind('drag', @dragPiece)
      .bind('dragend', @dragEnd)
+
+   last_piece_id =  @options.pieces.last().get('id')
    if last_piece_id is @piece.id
     $(@el).bind('load', @fadeOutCover)
 
@@ -285,3 +287,4 @@ class Puzzle.Views.Pieces.Piece extends Backbone.View
 
   fadeOutCover: () ->
    $("#cover").fadeOut().remove()
+   $('#hover_fake').show()

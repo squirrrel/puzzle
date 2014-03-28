@@ -51,7 +51,7 @@ class Puzzle.Views.Addons.CurrentPuzzle extends Backbone.View
 
 
   getCurrentPuzzle: () =>
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar('none','black_cover')
    imagen = new Puzzle.Models.Session(
     id: 'id', 
     restore_current: 'restore_current'

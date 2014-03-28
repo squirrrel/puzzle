@@ -30,7 +30,7 @@ class Piece < CouchRest::Model::Base
       set.shuffle!
     end
 
-    #private
+    private
 
     def get_all_child_pieces picture_id
       pieces.rows.map! do |row|
