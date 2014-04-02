@@ -10,13 +10,13 @@ Primary, puzzle is to be designed in order to learn Backbone.js features and app
 Once a picture is selected and a play session is started, the dropdown will be either disabled or hidden.
 
 * As a user I am supposed to preview pictures with high complexity prior to a play session, otherwise not. 
-If so, after selecting a category, a picture is shown with the 'X' to close the picture and start a play session as soon as I am finished analyzing it.
-OR:
-After selecting a category, a picture is shown with a 'Start' and 'Close' buttons. If I am ok with the picture, I press 'start' - the picture disappears and a play session starts. Otherwise, I click on close which makes it disappear and categories' dropdown be back. 
+  If so, after selecting a category, a picture is shown with the 'X' to close the picture and start a play session as soon as I am finished analyzing it.
+  OR:
+  After selecting a category, a picture is shown with a 'Start' and 'Close' buttons. If I am ok with the picture, I press 'start' - the picture disappears and a play session starts. Otherwise, I click on close which makes it disappear and categories' dropdown be back. 
 
 * As a user I should see an isolated area (board) at the center of the screen. This board is where pieces of puzzle must be applied in order to construct the whole picture. Its border must be styled appropriately.
 
-* As a user I should see pieces of puzzle all around the board. Each of them should be placed parallel to the screen axes, their image should be rotated upside down/bottom up/... to complicate the play session. Their individual position and distance relative to the rest and to the board should be arbitrary.
+* As a user I should see pieces of puzzle all around the board. Each of them should be placed parallel to the screen axes,their image should be rotated upside down/bottom up/... to complicate the play session. Their individual position and distance relative to the rest and to the board should be arbitrary.
 
 * I expect that on hovering a piece borders should be highleted
 
@@ -31,7 +31,7 @@ After selecting a category, a picture is shown with a 'Start' and 'Close' button
 * (From the last two points I assume that once on the board, only non-matching pieces can be freely moved across the board) 
 
 * I expect that, potentially, any piece can be moved across the free zone or from within the board to any free div on the free zone (in case a piece did not match). 
-OR: it can only be moved from the free zone onto the board and back to its original place from within the board in case it did not match.
+  OR: it can only be moved from the free zone onto the board and back to its original place from within the board in case it did not match.
 
 * After the picture is correctly constructed, I should be complimented and the above dropdown should be enabled/shown again so that I can select a category and start new play.
 
