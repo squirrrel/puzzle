@@ -18,13 +18,15 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    @addPiecesView()
    @addCategoriesView()
    @appendCurrentPuzzle()
-   ###@addLowerMarks()###
    return this
 
   addPiecesView: () =>
    unless @options.pieces.length is 0
     @setOffsetForAprioriMatched()
-    pieces_view = new Puzzle.Views.Pieces.Pieces(pieces: @options.pieces)
+    pieces_view = 
+     new Puzzle.Views.Pieces.Pieces(
+      pieces: @options.pieces
+     )
     $(@el).append(pieces_view.render().el)
 
   decideOnBackground: () ->
@@ -42,6 +44,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
       categories: @options.categories, 
       imagenes: @options.imagenes,
       pieces: @options.pieces,
+      image_reference: @options.image_reference,
       last_image_id: @getLastImageId()
      )
     $(@el).append(categories_view.render().el)
@@ -81,7 +84,7 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
    $('body').append(marks_view.render().el)  
 
   appendCurrentPuzzle: () =>
-   if @options.image_reference.length isnt 0 && @options.pieces.length is 0
+   if @options.image_reference.length isnt 0
     current_puzzle = 
      new Puzzle.Views.Addons.CurrentPuzzle(
       imagen: @getCurrentImage(),
@@ -120,12 +123,12 @@ class Puzzle.Views.Imagenes.IndexView extends Backbone.View
     last_category_length = last_category_images.length
     last_imagen_id = last_category_images[Number(last_category_length) - 1].id
 
-  appendCover: (background, flag) ->
-   cover_view = new Puzzle.Views.Addons.Cover(background: background, flag: flag)
+  appendCover: () ->
+   cover_view = new Puzzle.Views.Addons.Cover()
    $('body').append(cover_view.render().el)
 
-  addProgressBar: (background, flag) ->
-    @appendCover(background, flag)
+  addProgressBar: () ->
+    @appendCover()
     clock = new Sonic(
       width: 100,
       height: 100,

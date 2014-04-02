@@ -28,7 +28,7 @@ class Puzzle.Views.Addons.HiddenDiv extends Backbone.View
    $('#button').fadeIn()
 
   goToGallery: () =>
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar('none','black_cover')
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
    session = new Puzzle.Models.Session(id: 'id', hidden: 'hidden')
    session.save(session, { silent: true, wait: true })
    @options.image_reference.fetch()

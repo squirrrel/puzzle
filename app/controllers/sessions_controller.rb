@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
   def destroy
     Session.destroy_record()
     Session.garbage_collect()
-    p $redis.keys("*")
     render json: []
   end
 

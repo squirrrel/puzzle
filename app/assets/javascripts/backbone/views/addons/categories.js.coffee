@@ -31,6 +31,7 @@ class Puzzle.Views.Addons.Categories extends Backbone.View
      category: category,
      imagenes: @options.imagenes,
      pieces: @options.pieces,
+     image_reference: @options.image_reference,     
      last_image_id: @options.last_image_id
     )
    $(@el).append(category_view.render().el)

@@ -46,10 +46,11 @@ class Puzzle.Views.Imagenes.Imagen extends Backbone.View
     error: @display_error 
    })
    $('#categories').fadeOut()
-   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar(@image_title, 'scene')
+   Puzzle.Views.Imagenes.IndexView.prototype.addProgressBar()
 
   display_puzzle: (model, response) =>
    @options.pieces.fetch()
+   @options.image_reference.fetch()
    $('body').css('background', "url('assets/skulls.png') repeat left top")
    $('body, html').css('overflow', 'hidden')
 
