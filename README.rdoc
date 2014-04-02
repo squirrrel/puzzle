@@ -1,4 +1,4 @@
-=== Purpose
+=== Purpose::
   Primary, puzzle is to be designed in order to learn Backbone.js features and apply them on practice.
 
 === User Stories
