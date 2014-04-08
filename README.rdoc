@@ -65,12 +65,34 @@ User story: as a user, I should be able to match any number of pieces everywhere
 
 Android version?
 
-=== Consider:
+=== Consider at a later time:
 - keep pieces in a div and centered to make it resemble a nice gallery. divs should be black background?
-- Current Puzzle Image should be alive during the actual play too?
+- Current Puzzle Image should be alive during the actual play too
 - Background job for deleting outdated sessions FAILED for now. Whenever gem works fine, except it cannot access current class variables values, therefore Session.garbage_collect cannot be scheduled. Perhaps, I try another gem?
 - write a set-up guide
-- Prototype Javascript
-- manual on Backbone.js
-- Canvas
-- Ruby 2.1.1
+
+=== Set-Up Guide:
+
+== General pre-setup
+1. Install Git, set it up and clone the project according to Git instructions
+2. Run 'bundle install' in the project directory in order to install all the missing gems
+3. Install Redis key-value store and document-oriented CouchDB  latest version
+4. Go and find 'redis.conf' file. Under the Snapshotting section, comment out the following lines:
+
+# save 900 1
+# save 300 10
+# save 60 10000
+
+== Database seeding
+Note that because active_record framework was originally removed due to the project's CouchRest Model & 'RedisClient' ORM usage, no migrations should be run.
+
+5. In the project directory run 'rails c' to switch to the console mode. When in the console mode, execute consequently three methods running the following commands:
+ - 'Imagen.create_imagenes()'
+ - 'Imagen.save_image_size()'
+ - 'Imagen.create_pedazos()'
+
+
+=== Actual usage guide:
+1. Open terminal and run redis server as a background daemon or as a service('redis-server' command)
+2. Open another terminal and run 'rails s' to start server
+3. Visit 'localhost:3000/' and voila! Have fun!

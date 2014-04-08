@@ -85,6 +85,7 @@ class Imagen < CouchRest::Model::Base
 
     def save_image_size
       Dir.chdir("/home/ninok/projects/puzzle/app/assets/images/")
+
       imagenslave_list().each do |img|
         image_file = ImageList.new(img[:title])
 
