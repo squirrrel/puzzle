@@ -37,6 +37,7 @@ Once a picture is selected and a play session is started, the dropdown will be e
 
 === Technologies to be used:
 * CouchDB
+* Redis
 * Ruby 1.9.3/2.0.0
 * Ruby on Rails 4.0.0
 * RMagick gem
@@ -73,17 +74,16 @@ Android version?
 
 === Set-Up Guide:
 
-== General pre-setup
+===== General pre-setup
 1. Install Git, set it up and clone the project according to Git instructions
 2. Run 'bundle install' in the project directory in order to install all the missing gems
 3. Install Redis key-value store and document-oriented CouchDB  latest version
 4. Go and find 'redis.conf' file. Under the Snapshotting section, comment out the following lines:
+ # save 900 1
+ # save 300 10
+ # save 60 10000
 
-# save 900 1
-# save 300 10
-# save 60 10000
-
-== Database seeding
+===== Database seeding
 Note that because active_record framework was originally removed due to the project's CouchRest Model & 'RedisClient' ORM usage, no migrations should be run.
 
 5. In the project directory run 'rails c' to switch to the console mode. When in the console mode, execute consequently three methods running the following commands:
